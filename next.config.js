@@ -28,4 +28,6 @@ module.exports = (phase, { defaultConfig }) =>
       }
       return config
     },
+    // Target must be serverless
+    target: 'serverless',
   })
