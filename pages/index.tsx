@@ -2,8 +2,9 @@ import React from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.scss'
 import FormDemo from '../components/FormDemo'
+import { withAuthenticator } from '@aws-amplify/ui-react'
 
-export default function Home() {
+const Home = () => {
   return (
     <div className={styles.container}>
       <Head>
@@ -17,3 +18,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default withAuthenticator(Home)

@@ -4,17 +4,30 @@ import Link from 'next/link'
 
 import Amplify from 'aws-amplify'
 import config from '../src/aws-exports'
-import Layout, { Content, Header } from 'antd/lib/layout/layout'
 import { Menu } from 'antd'
+import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
+import React, { useEffect, useState } from 'react'
+import { AmplifySignOut } from '@aws-amplify/ui-react'
+
 Amplify.configure({
   ...config,
   ssr: true,
 })
 
-function MyApp({ Component, pageProps }) {
+const MyApp = ({ Component, pageProps }) => {
+  const [authState, setAuthState] = useState(AuthState.SignedOut)
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    onAuthUIStateChange((nextAuthState, authData) => {
+      setAuthState(nextAuthState)
+      setUser(authData)
+    })
+  }, [])
+
   return (
-    <Layout>
-      <Header>
+    <>
+      <div>
         <Menu mode="horizontal">
           <Menu.Item>
             <Link href="/">
@@ -26,17 +39,17 @@ function MyApp({ Component, pageProps }) {
               <span>Profile</span>
             </Link>
           </Menu.Item>
-          <Menu.Item>
-            <Link href="/protected-client-route">
-              <span>Protected client route</span>
-            </Link>
-          </Menu.Item>
+          {authState === AuthState.SignedIn && user && (
+            <Menu.Item>
+              <AmplifySignOut />
+            </Menu.Item>
+          )}
         </Menu>
-      </Header>
-      <Content>
+      </div>
+      <div>
         <Component {...pageProps} />
-      </Content>
-    </Layout>
+      </div>
+    </>
   )
 }
 

@@ -1,27 +1,21 @@
 import { useState, useEffect } from 'react'
 import { Auth } from 'aws-amplify'
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
+import { useRouter } from 'next/router'
 
-function Profile() {
+const Profile = () => {
   const [user, setUser] = useState(null)
+  const router = useRouter()
   useEffect(() => {
-    // Access the user session on the client
     Auth.currentAuthenticatedUser()
-      .then((user) => {
-        console.log('User: ', user)
-        setUser(user)
-      })
-      .catch((err) => {
-        console.log(err)
+      .then((user) => setUser(user))
+      // if there is no authenticated user, redirect to profile page
+      .catch(() => {
+        router.push('/')
         setUser(null)
       })
   }, [])
-  return (
-    <div>
-      {user && <h1>Welcome, {user.username}</h1>}
-      <AmplifySignOut />
-    </div>
-  )
+
+  return <div>{user && <h1>Welcome, {user.username}</h1>}</div>
 }
 
-export default withAuthenticator(Profile)
+export default Profile
