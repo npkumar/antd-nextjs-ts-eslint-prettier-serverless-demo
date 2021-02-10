@@ -7,6 +7,7 @@ import { Menu } from 'antd'
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
 import React, { useEffect, useState } from 'react'
 import { AmplifySignOut } from '@aws-amplify/ui-react'
+import Authentication from '../components/Authentication'
 
 Amplify.configure({
   Auth: {
@@ -14,10 +15,10 @@ Amplify.configure({
     region: 'ap-northeast-1',
 
     // OPTIONAL - Amazon Cognito User Pool ID
-    userPoolId: 'ap-northeast-1_0NCoHSIU4',
+    userPoolId: 'ap-northeast-1_jhu6PLl8f',
 
     // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-    userPoolWebClientId: '2hb06d27ehja2v463qcl9km9e',
+    userPoolWebClientId: '6sntbopqn3ajsrj6mcqloe2me2',
   },
   ssr: true,
 })
@@ -33,7 +34,7 @@ const MyApp = ({ Component, pageProps }) => {
     })
   }, [])
 
-  return (
+  return authState === AuthState.SignedIn && user ? (
     <>
       <div>
         <Menu mode="horizontal">
@@ -58,6 +59,8 @@ const MyApp = ({ Component, pageProps }) => {
         <Component {...pageProps} />
       </div>
     </>
+  ) : (
+    <Authentication />
   )
 }
 

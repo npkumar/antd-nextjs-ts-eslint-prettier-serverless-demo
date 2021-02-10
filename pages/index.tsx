@@ -2,7 +2,6 @@ import React from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.scss'
 import FormDemo from '../components/FormDemo'
-import { withAuthenticator } from '@aws-amplify/ui-react'
 
 const Home = () => {
   return (
@@ -19,4 +18,4 @@ const Home = () => {
   )
 }
 
-export default withAuthenticator(Home)
+export default Home
