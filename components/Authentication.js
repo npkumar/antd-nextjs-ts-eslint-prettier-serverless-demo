@@ -1,6 +1,13 @@
 import { AmplifyAuthenticator, AmplifySignIn, AmplifySignUp } from '@aws-amplify/ui-react'
+import { useRouter } from 'next/router'
+import en from '../locales/en'
+import ja from '../locales/ja'
 
 const Authentication = () => {
+  const router = useRouter()
+  const { locale } = router
+  const t = locale === 'ja' ? ja : en
+
   return (
     <AmplifyAuthenticator usernameAlias="email">
       <AmplifySignUp
@@ -9,14 +16,14 @@ const Authentication = () => {
         formFields={[
           {
             type: 'email',
-            label: 'Custom email Label',
-            placeholder: 'custom email placeholder',
+            label: t.authentication.emailLabel,
+            placeholder: t.authentication.emailLabel,
             required: true,
           },
           {
             type: 'password',
-            label: 'Custom Password Label',
-            placeholder: 'custom password placeholder',
+            label: t.authentication.passwordLabel,
+            placeholder: t.authentication.passwordLabel,
             required: true,
           },
           {
@@ -33,14 +40,14 @@ const Authentication = () => {
         formFields={[
           {
             type: 'email',
-            label: 'Custom email Label',
-            placeholder: 'custom email placeholder',
+            label: t.authentication.emailLabel,
+            placeholder: t.authentication.emailLabel,
             required: true,
           },
           {
             type: 'password',
-            label: 'Custom Password Label',
-            placeholder: 'custom password placeholder',
+            label: t.authentication.passwordLabel,
+            placeholder: t.authentication.passwordLabel,
             required: true,
           },
         ]}

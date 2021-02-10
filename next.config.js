@@ -28,4 +28,8 @@ module.exports = (phase, { defaultConfig }) =>
       }
       return config
     },
+    i18n: {
+      locales: ['ja', 'en'],
+      defaultLocale: 'ja',
+    },
   })
