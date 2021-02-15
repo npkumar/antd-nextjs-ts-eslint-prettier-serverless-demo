@@ -15,7 +15,16 @@ const Profile = () => {
       })
   }, [])
 
-  return <div>{user && <h1>Welcome, {user.signInUserSession.idToken.payload.email}</h1>}</div>
+  return (
+    <div>
+      {user && (
+        <>
+          <h1>Welcome, {user.signInUserSession.idToken.payload.email}</h1>
+          <h2>Welcome, {user.signInUserSession.idToken.payload['cognito:groups']}</h2>
+        </>
+      )}
+    </div>
+  )
 }
 
 export default Profile

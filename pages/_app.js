@@ -8,6 +8,10 @@ import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
 import React, { useEffect, useState } from 'react'
 import { AmplifySignOut } from '@aws-amplify/ui-react'
 import Authentication from '../components/Authentication'
+import dictionary from '../dictionary'
+import { useRouter } from 'next/router'
+
+Amplify.I18n.putVocabulariesForLanguage('ja', dictionary)
 
 Amplify.configure({
   Auth: {
@@ -26,6 +30,10 @@ Amplify.configure({
 const MyApp = ({ Component, pageProps }) => {
   const [authState, setAuthState] = useState(AuthState.SignedOut)
   const [user, setUser] = useState(null)
+
+  const router = useRouter()
+  const { locale } = router
+  Amplify.I18n.setLanguage(locale === 'ja' ? 'ja' : 'en')
 
   useEffect(() => {
     onAuthUIStateChange((nextAuthState, authData) => {
