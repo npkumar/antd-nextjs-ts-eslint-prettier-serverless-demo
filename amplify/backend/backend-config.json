@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "antdnextjstseslintprbd23916a": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

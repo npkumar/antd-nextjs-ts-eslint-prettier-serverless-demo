@@ -13,17 +13,9 @@ import { useRouter } from 'next/router'
 
 Amplify.I18n.putVocabulariesForLanguage('ja', dictionary)
 
+import config from '../src/aws-exports'
 Amplify.configure({
-  Auth: {
-    // REQUIRED - Amazon Cognito Region
-    region: 'ap-northeast-1',
-
-    // OPTIONAL - Amazon Cognito User Pool ID
-    userPoolId: 'ap-northeast-1_jhu6PLl8f',
-
-    // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-    userPoolWebClientId: '6sntbopqn3ajsrj6mcqloe2me2',
-  },
+  ...config,
   ssr: true,
 })
 

@@ -1,17 +1,8 @@
 import Amplify, { withSSRContext } from 'aws-amplify'
 
-// Amplify SSR configuration needs to be enabled within each API route
+import config from '../../src/aws-exports'
 Amplify.configure({
-  Auth: {
-    // REQUIRED - Amazon Cognito Region
-    region: 'ap-northeast-1',
-
-    // OPTIONAL - Amazon Cognito User Pool ID
-    userPoolId: 'ap-northeast-1_0NCoHSIU4',
-
-    // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-    userPoolWebClientId: '2hb06d27ehja2v463qcl9km9e',
-  },
+  ...config,
   ssr: true,
 })
 
