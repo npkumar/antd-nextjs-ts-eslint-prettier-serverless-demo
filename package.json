@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.0.18",
     "@aws-amplify/ui-react": "^0.2.37",
     "antd": "^4.11.2",
     "aws-amplify": "^3.3.17",
