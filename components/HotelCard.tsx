@@ -45,7 +45,7 @@ const HotelCard: React.FC = () => {
   }, [])
 
   return (
-    <>
+    <div>
       <Drawer
         width="640"
         title={date}
@@ -76,7 +76,7 @@ const HotelCard: React.FC = () => {
           </Col>
         </Row>
       </Card>
-    </>
+    </div>
   )
 }
 
