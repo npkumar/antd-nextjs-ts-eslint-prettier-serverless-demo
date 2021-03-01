@@ -8,10 +8,10 @@
     "start": "next start"
   },
   "dependencies": {
-    "@ant-design/charts": "^1.0.18",
     "@aws-amplify/ui-react": "^0.2.37",
     "antd": "^4.11.2",
     "aws-amplify": "^3.3.17",
+    "bizcharts": "^4.1.7",
     "next": "^10.0.6",
     "next-plugin-antd-less": "^0.2.0",
     "react": "17.0.1",
