@@ -12,6 +12,7 @@
     "antd": "^4.11.2",
     "aws-amplify": "^3.3.17",
     "bizcharts": "^4.1.7",
+    "moment": "^2.29.1",
     "next": "^10.0.6",
     "next-plugin-antd-less": "^0.2.0",
     "react": "17.0.1",

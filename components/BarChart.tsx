@@ -45,7 +45,7 @@ const BarChart: React.FC = () => {
         <p>Some contents...</p>
         <p>Some contents...</p>
       </Drawer>
-      <Chart autoFit padding="auto" data={data} onPlotClick={onClickHandler}>
+      <Chart autoFit padding="auto" data={data} onPlotClick={onClickHandler} animate={false}>
         <Interval position="date*price" />
         {/* <Interaction type="element-highlight" /> */}
         <Interaction type="active-region" />
