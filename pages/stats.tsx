@@ -4,6 +4,7 @@ import {
   Calendar,
   Col,
   Drawer,
+  notification,
   PageHeader,
   Popover,
   Radio,
@@ -76,11 +77,20 @@ const Stats: React.FC = () => {
     const handleScroll = throttle((e) => {
       if (calenderRef && calenderRef.current) {
         if (calenderRef.current.getBoundingClientRect().bottom <= window.innerHeight) {
-          setValue((pv) => pv.clone().add(1, 'month'))
-          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+          setValue((pv) => {
+            const nextValue = pv.clone().add(1, 'month')
+            window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+
+            notification.info({
+              message: `${nextValue.format('MMM, YYYY')}`,
+              description: `You are currently viewing ${nextValue.format('MMM, YYYY')}`,
+              placement: 'topRight',
+            })
+            return nextValue
+          })
         }
       }
-    }, 1000)
+    }, 1500)
     window.addEventListener('scroll', handleScroll)
 
     return () => {
