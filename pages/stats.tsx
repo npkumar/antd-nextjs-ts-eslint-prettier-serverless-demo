@@ -78,6 +78,7 @@ const Stats: React.FC = () => {
           style={{
             height: '100%',
             width: '100%',
+            overflow: 'hidden',
           }}
         >
           <div style={{ textAlign: 'center', marginTop: 16, marginBottom: 16, fontSize: 16 }}>

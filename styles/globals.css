@@ -15,15 +15,6 @@ a {
   box-sizing: border-box;
 }
 
-.ant-picker-header {
-  background: blueviolet;
-}
-
-.ant-btn {
-  border-radius: 100px !important;
-}
-
-
 :root {
   --amplify-primary-color: #0083e8;
   --amplify-primary-tint: #006ec2;
