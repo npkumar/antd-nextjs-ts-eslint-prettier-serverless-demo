@@ -11,6 +11,7 @@ import {
   Select,
   Space,
   Tag,
+  Typography,
 } from 'antd'
 import moment, { Moment } from 'moment'
 import throttle from 'lodash/throttle'
@@ -187,6 +188,9 @@ const Stats: React.FC = () => {
             return (
               <div style={{ padding: 8 }}>
                 <Row gutter={8} justify="end">
+                  <Col>
+                    <Typography.Title level={3}>{value.format('MMM, YYYY')}</Typography.Title>
+                  </Col>
                   <Col>
                     <Radio.Group onChange={(e) => onTypeChange(e.target.value)} value={type}>
                       <Radio.Button value="month">Month</Radio.Button>
