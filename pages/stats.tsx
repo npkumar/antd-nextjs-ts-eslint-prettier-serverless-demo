@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import {
+  BackTop,
   Button,
   Calendar,
   Col,
@@ -16,6 +17,7 @@ import {
 } from 'antd'
 import moment, { Moment } from 'moment'
 import throttle from 'lodash/throttle'
+import { CaretLeftOutlined, CaretRightOutlined } from '@ant-design/icons'
 
 const getListData = (value: Moment) => {
   switch (value.date()) {
@@ -75,21 +77,20 @@ const Stats: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = throttle((e) => {
-      if (calenderRef && calenderRef.current) {
-        if (calenderRef.current.getBoundingClientRect().bottom <= window.innerHeight) {
-          setValue((pv) => {
-            const nextValue = pv.clone().add(1, 'month')
-            window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
-
-            notification.info({
-              message: `${nextValue.format('MMM, YYYY')}`,
-              description: `You are currently viewing ${nextValue.format('MMM, YYYY')}`,
-              placement: 'topRight',
-            })
-            return nextValue
-          })
-        }
-      }
+      // if (calenderRef && calenderRef.current) {
+      //   if (calenderRef.current.getBoundingClientRect().bottom <= window.innerHeight) {
+      //     setValue((pv) => {
+      //       const nextValue = pv.clone().add(1, 'month')
+      //       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+      //       notification.info({
+      //         message: `${nextValue.format('MMM, YYYY')}`,
+      //         description: `You are currently viewing ${nextValue.format('MMM, YYYY')}`,
+      //         placement: 'topRight',
+      //       })
+      //       return nextValue
+      //     })
+      //   }
+      // }
     }, 1500)
     window.addEventListener('scroll', handleScroll)
 
@@ -155,7 +156,7 @@ const Stats: React.FC = () => {
         <p>Some contents...</p>
       </Drawer>
       <PageHeader backIcon={false} title="Stats" subTitle="Description for stats" />
-      <div ref={calenderRef} style={{ paddingBottom: 160 }}>
+      <div ref={calenderRef}>
         <Calendar
           value={value}
           onPanelChange={onPanelChange}
@@ -257,6 +258,43 @@ const Stats: React.FC = () => {
           }}
         />
       </div>
+      <BackTop style={{ marginRight: 60, marginBottom: -32 }} visibilityHeight={1}>
+        <Space>
+          <Button
+            icon={<CaretLeftOutlined />}
+            type="primary"
+            onClick={() => {
+              setValue((pv) => {
+                const nextValue = pv.clone().subtract(1, 'month')
+                notification.info({
+                  message: `${nextValue.format('MMM, YYYY')}`,
+                  description: `You are currently viewing ${nextValue.format('MMM, YYYY')}`,
+                  placement: 'topRight',
+                })
+                return nextValue
+              })
+            }}
+          >
+            Prev
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              setValue((pv) => {
+                const nextValue = pv.clone().add(1, 'month')
+                notification.info({
+                  message: `${nextValue.format('MMM, YYYY')}`,
+                  description: `You are currently viewing ${nextValue.format('MMM, YYYY')}`,
+                  placement: 'topRight',
+                })
+                return nextValue
+              })
+            }}
+          >
+            Next <CaretRightOutlined />
+          </Button>
+        </Space>
+      </BackTop>
     </>
   )
 }
