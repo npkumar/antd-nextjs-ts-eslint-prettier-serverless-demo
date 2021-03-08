@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   BackTop,
   Button,
@@ -16,7 +16,6 @@ import {
   Typography,
 } from 'antd'
 import moment, { Moment } from 'moment'
-import throttle from 'lodash/throttle'
 import { CaretLeftOutlined, CaretRightOutlined } from '@ant-design/icons'
 
 const getListData = (value: Moment) => {
@@ -74,30 +73,6 @@ const Stats: React.FC = () => {
   }
 
   const calenderRef = useRef(null)
-
-  useEffect(() => {
-    const handleScroll = throttle((e) => {
-      // if (calenderRef && calenderRef.current) {
-      //   if (calenderRef.current.getBoundingClientRect().bottom <= window.innerHeight) {
-      //     setValue((pv) => {
-      //       const nextValue = pv.clone().add(1, 'month')
-      //       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
-      //       notification.info({
-      //         message: `${nextValue.format('MMM, YYYY')}`,
-      //         description: `You are currently viewing ${nextValue.format('MMM, YYYY')}`,
-      //         placement: 'topRight',
-      //       })
-      //       return nextValue
-      //     })
-      //   }
-      // }
-    }, 1500)
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
 
   const dateCellRender = (value) => {
     const listData = getListData(value)
