@@ -3,8 +3,9 @@ import '../styles/globals.css'
 import Link from 'next/link'
 import Amplify, { Auth } from 'aws-amplify'
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
-import React, { useEffect, useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import Authentication from '../components/Authentication'
+import LanguageDropdown from '../components/LanguageDropdown'
 import dictionary from '../dictionary'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
@@ -17,6 +18,7 @@ import {
   RiseOutlined,
   LogoutOutlined,
 } from '@ant-design/icons'
+import { appWithTranslation } from 'next-i18next'
 
 const { Header, Sider, Content } = Layout
 
@@ -37,8 +39,8 @@ const MyApp = ({ Component, pageProps }) => {
   const { locale, pathname } = router
   Amplify.I18n.setLanguage(locale === 'ja' ? 'ja' : 'en')
 
-  useEffect(() => {
-    onAuthUIStateChange((nextAuthState, authData) => {
+  useLayoutEffect(() => {
+    return onAuthUIStateChange((nextAuthState, authData) => {
       setAuthState(nextAuthState)
       setUser(authData)
     })
@@ -94,7 +96,10 @@ const MyApp = ({ Component, pageProps }) => {
                 KAKAKU
               </Col>
               <Col span={12}>
-                <Row justify="end">
+                <Row justify="end" gutter={8}>
+                  <Col>
+                    <LanguageDropdown />
+                  </Col>
                   <Col style={{ marginRight: '16px' }}>
                     <Button type="primary" onClick={() => Auth.signOut()} icon={<LogoutOutlined />}>
                       Logout
@@ -122,4 +127,4 @@ const MyApp = ({ Component, pageProps }) => {
   )
 }
 
-export default MyApp
+export default appWithTranslation(MyApp)

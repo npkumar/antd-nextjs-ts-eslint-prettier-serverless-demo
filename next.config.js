@@ -1,5 +1,6 @@
 // https://github.com/vercel/next.js/issues/11584
 const withAntdLess = require('next-plugin-antd-less')
+const { i18n } = require('./next-i18next.config')
 
 module.exports = (phase, { defaultConfig }) =>
   withAntdLess({
@@ -28,8 +29,5 @@ module.exports = (phase, { defaultConfig }) =>
       }
       return config
     },
-    i18n: {
-      locales: ['ja', 'en'],
-      defaultLocale: 'ja',
-    },
+    i18n,
   })
