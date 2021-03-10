@@ -17,6 +17,7 @@ import {
   LineChartOutlined,
   RiseOutlined,
   LogoutOutlined,
+  LockOutlined,
 } from '@ant-design/icons'
 import { appWithTranslation } from 'next-i18next'
 
@@ -68,6 +69,9 @@ const MyApp = ({ Component, pageProps }) => {
           <Menu theme="dark" mode="inline" selectedKeys={[pathname]}>
             <Menu.Item key="/" icon={<HomeOutlined />}>
               <Link href="/">Dashboard</Link>
+            </Menu.Item>
+            <Menu.Item key="/credentials" icon={<LockOutlined />}>
+              <Link href="/credentials">Credentials</Link>
             </Menu.Item>
             <Menu.Item key="/stats" icon={<LineChartOutlined />}>
               <Link href="/stats">Stats</Link>
