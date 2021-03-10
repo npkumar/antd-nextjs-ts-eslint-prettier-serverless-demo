@@ -2,7 +2,7 @@
 import { Button, Row, List, PageHeader, Space, Col, Input, Pagination, Skeleton } from 'antd'
 import React, { useState } from 'react'
 import useSWR, { cache } from 'swr'
-import { DeleteOutlined, EditOutlined, PlusSquareOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons'
 
 // @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
 const fetcher = async (input: RequestInfo, init: RequestInit) => {
@@ -54,9 +54,10 @@ const Credentials: React.FC = () => {
               {/* @ts-ignore */}
               <List.Item.Meta title={item.email} description={item.name} />
               <Space>
+                <Button icon={<EyeOutlined />}>View</Button>
                 <Button icon={<EditOutlined />}>Edit</Button>
                 <Button danger icon={<DeleteOutlined />}>
-                  Deactivate
+                  Delete
                 </Button>
               </Space>
             </Skeleton>

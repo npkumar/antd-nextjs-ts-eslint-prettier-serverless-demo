@@ -9,7 +9,7 @@ import LanguageDropdown from '../components/LanguageDropdown'
 import dictionary from '../dictionary'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import { Button, Layout, Menu, Row, Col } from 'antd'
+import { Button, Layout, Menu, Row, Col, ConfigProvider } from 'antd'
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -20,6 +20,7 @@ import {
   LockOutlined,
 } from '@ant-design/icons'
 import { appWithTranslation } from 'next-i18next'
+import jaJP from 'antd/lib/locale/ja_JP'
 
 const { Header, Sider, Content } = Layout
 
@@ -49,13 +50,14 @@ const MyApp = ({ Component, pageProps }) => {
   }, [])
 
   return authState === AuthState.SignedIn && user ? (
-    <>
+    <ConfigProvider locale={locale === 'ja' && jaJP}>
       <Head>
         <title>Kakaku</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
         <Sider
+          breakpoint="lg"
           style={{
             overflow: 'auto',
             height: '100vh',
@@ -126,7 +128,7 @@ const MyApp = ({ Component, pageProps }) => {
           </Content>
         </Layout>
       </Layout>
-    </>
+    </ConfigProvider>
   ) : (
     <Authentication />
   )
