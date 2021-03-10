@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import Link from 'next/link'
 import Amplify, { Auth } from 'aws-amplify'
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Authentication from '../components/Authentication'
 import LanguageDropdown from '../components/LanguageDropdown'
 import dictionary from '../dictionary'
@@ -26,6 +26,7 @@ const { Header, Sider, Content } = Layout
 Amplify.I18n.putVocabulariesForLanguage('ja', dictionary)
 
 import config from '../src/aws-exports'
+import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
 Amplify.configure({
   ...config,
   ssr: true,
@@ -40,7 +41,7 @@ const MyApp = ({ Component, pageProps }) => {
   const { locale, pathname } = router
   Amplify.I18n.setLanguage(locale === 'ja' ? 'ja' : 'en')
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     return onAuthUIStateChange((nextAuthState, authData) => {
       setAuthState(nextAuthState)
       setUser(authData)

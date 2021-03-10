@@ -1,9 +1,14 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Button, Row, List, PageHeader, Space, Col, Input, Pagination, Skeleton } from 'antd'
 import React, { useState } from 'react'
 import useSWR, { cache } from 'swr'
 import { DeleteOutlined, EditOutlined, PlusSquareOutlined } from '@ant-design/icons'
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json())
+// @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
+const fetcher = async (input: RequestInfo, init: RequestInit) => {
+  const res = await fetch(input, init)
+  return res.json()
+}
 
 const Credentials: React.FC = () => {
   const [current, setCurrent] = useState<number>(1)
@@ -17,7 +22,6 @@ const Credentials: React.FC = () => {
   if (error) return <div>Failed to load</div>
   // if (!data) return <div>Loading...</div>
 
-  console.log(current)
   return (
     <div>
       <PageHeader backIcon={false} title="Credentials" subTitle="Credentials description" />
@@ -47,8 +51,8 @@ const Credentials: React.FC = () => {
         renderItem={(item) => (
           <List.Item>
             <Skeleton title={false} loading={!data} active>
+              {/* @ts-ignore */}
               <List.Item.Meta title={item.email} description={item.name} />
-
               <Space>
                 <Button icon={<EditOutlined />}>Edit</Button>
                 <Button danger icon={<DeleteOutlined />}>
