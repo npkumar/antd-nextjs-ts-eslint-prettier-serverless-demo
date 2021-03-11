@@ -3,6 +3,7 @@ import { Button, Row, List, PageHeader, Space, Col, Input, Pagination, Skeleton 
 import React, { useState } from 'react'
 import useSWR, { cache } from 'swr'
 import { DeleteOutlined, EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons'
+import Link from 'next/link'
 
 // @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
 const fetcher = async (input: RequestInfo, init: RequestInit) => {
@@ -10,7 +11,7 @@ const fetcher = async (input: RequestInfo, init: RequestInit) => {
   return res.json()
 }
 
-const Credentials: React.FC = () => {
+const Index: React.FC = () => {
   const [current, setCurrent] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(500)
 
@@ -54,8 +55,14 @@ const Credentials: React.FC = () => {
               {/* @ts-ignore */}
               <List.Item.Meta title={item.email} description={item.name} />
               <Space>
-                <Button icon={<EyeOutlined />}>View</Button>
-                <Button icon={<EditOutlined />}>Edit</Button>
+                {/* @ts-ignore */}
+                <Link href={`/credentials/${item.id}`}>
+                  <Button icon={<EyeOutlined />}>View</Button>
+                </Link>
+                {/* @ts-ignore */}
+                <Link href={`/credentials/${item.id}/edit`}>
+                  <Button icon={<EditOutlined />}>Edit</Button>
+                </Link>
                 <Button danger icon={<DeleteOutlined />}>
                   Delete
                 </Button>
@@ -83,4 +90,4 @@ const Credentials: React.FC = () => {
   )
 }
 
-export default Credentials
+export default Index
