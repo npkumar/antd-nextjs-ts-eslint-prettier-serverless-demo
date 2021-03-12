@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Input, PageHeader, Space } from 'antd'
-import useSWR from 'swr'
+import { Button, Form, Input, PageHeader, Space, notification } from 'antd'
+import useSWR, { mutate } from 'swr'
 import { EyeOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import DeleteCredentialButton from '../../../components/DeleteCredentialButton'
@@ -25,6 +25,7 @@ const CredentialsEdit: React.FC = () => {
   const router = useRouter()
   const { query } = router
   const [form] = Form.useForm()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { data, error } = useSWR(
     `https://jsonplaceholder.typicode.com/comments/${query.id}`,
@@ -36,7 +37,34 @@ const CredentialsEdit: React.FC = () => {
   if (!data) return <div>Loading...</div>
 
   const onFinish = (values: any) => {
-    console.log('Success:', values)
+    setIsLoading(true)
+    return new Promise((resolve, reject) => {
+      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
+    })
+      .then(() => {
+        console.log(values)
+        setIsLoading(false)
+
+        // Revalidate key
+        mutate(`https://jsonplaceholder.typicode.com/comments/${query.id}`)
+        // And redirect
+        router.push(`/credentials/${query.id}`)
+
+        notification.info({
+          message: 'Successful!',
+          description: `Updated credential`,
+          placement: 'topRight',
+        })
+      })
+      .catch((e) => {
+        console.error(e)
+        setIsLoading(false)
+        notification.error({
+          message: 'Something went wrong!',
+          description: `Could not update`,
+          placement: 'topRight',
+        })
+      })
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -105,7 +133,7 @@ const CredentialsEdit: React.FC = () => {
 
         <Form.Item {...tailLayout}>
           <Space>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={isLoading}>
               Submit
             </Button>
             <Button htmlType="button" onClick={onReset}>
