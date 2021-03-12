@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Button, Row, List, PageHeader, Space, Col, Input, Pagination, Skeleton } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useSWR, { cache } from 'swr'
 import { DeleteOutlined, EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 // @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
 const fetcher = async (input: RequestInfo, init: RequestInit) => {
@@ -12,13 +13,28 @@ const fetcher = async (input: RequestInfo, init: RequestInit) => {
 }
 
 const Index: React.FC = () => {
-  const [current, setCurrent] = useState<number>(1)
+  const router = useRouter()
+  const { query } = router
+
+  const page = parseInt(
+    Array.isArray(query.page)
+      ? Number.isInteger(query.page[0])
+        ? query.page[0]
+        : '1'
+      : query.page ?? '1',
+    10
+  )
+  const [current, setCurrent] = useState<number>(page)
   const [totalPages, setTotalPages] = useState<number>(500)
 
   const { data, error } = useSWR(
     `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6`,
     fetcher
   )
+
+  useEffect(() => {
+    setCurrent(page)
+  }, [page])
 
   if (error) return <div>Failed to load</div>
   // if (!data) return <div>Loading...</div>
@@ -37,7 +53,9 @@ const Index: React.FC = () => {
               />
             </Col>
             <Col>
-              <Button icon={<PlusSquareOutlined />}>Add Credential</Button>
+              <Link href="/credentials/new">
+                <Button icon={<PlusSquareOutlined />}>Add Credential</Button>
+              </Link>
             </Col>
           </Row>
         }
@@ -79,6 +97,10 @@ const Index: React.FC = () => {
             onChange={(page) => {
               // cache.clear()
               setCurrent(page)
+              router.push({
+                pathname: '/credentials',
+                query: { ...query, page },
+              })
             }}
             total={totalPages}
             showSizeChanger={false}

@@ -4,7 +4,7 @@ import { Button, Form, PageHeader } from 'antd'
 import useSWR from 'swr'
 import Text from 'antd/lib/typography/Text'
 import Link from 'next/link'
-import { EditOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusSquareOutlined } from '@ant-design/icons'
 
 // @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
 const fetcher = async (input: RequestInfo, init: RequestInit) => {
@@ -39,11 +39,14 @@ const CredentialsView: React.FC = () => {
           <Link key="edit" href={`/credentials/${data?.id}/edit`}>
             <Button icon={<EditOutlined />}>Edit</Button>
           </Link>,
+          <Link key="create" href="/credentials/new">
+            <Button icon={<PlusSquareOutlined />}>Add Credential</Button>
+          </Link>,
         ]}
       />
 
       <Form {...layout}>
-        <Form.Item label="Username">
+        <Form.Item label="System Id">
           <Text>{data?.email}</Text>
         </Form.Item>
 
@@ -51,12 +54,12 @@ const CredentialsView: React.FC = () => {
           <Text>{data?.email}</Text>
         </Form.Item>
 
-        <Form.Item label="System Id">
+        <Form.Item label="Username">
           <Text>{data?.email}</Text>
         </Form.Item>
 
         <Form.Item label="Password">
-          <Text>{data?.email}</Text>
+          <Text mark>*********</Text>
         </Form.Item>
       </Form>
     </>

@@ -1,15 +1,7 @@
 import React from 'react'
-import { useRouter } from 'next/router'
 import { Button, Form, Input, PageHeader, Space } from 'antd'
-import useSWR from 'swr'
-import { EyeOutlined, PlusSquareOutlined } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
 import Link from 'next/link'
-
-// @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
-const fetcher = async (input: RequestInfo, init: RequestInit) => {
-  const res = await fetch(input, init)
-  return res.json()
-}
 
 const layout = {
   labelCol: { span: 4 },
@@ -20,19 +12,8 @@ const tailLayout = {
   wrapperCol: { offset: 4, span: 16 },
 }
 
-const CredentialsEdit: React.FC = () => {
-  const router = useRouter()
-  const { query } = router
+const CredentialsNew: React.FC = () => {
   const [form] = Form.useForm()
-
-  const { data, error } = useSWR(
-    `https://jsonplaceholder.typicode.com/comments/${query.id}`,
-    fetcher
-  )
-
-  if (error) return <div>Failed to load</div>
-
-  if (!data) return <div>Loading...</div>
 
   const onFinish = (values: any) => {
     console.log('Success:', values)
@@ -48,18 +29,7 @@ const CredentialsEdit: React.FC = () => {
 
   return (
     <>
-      <PageHeader
-        backIcon={false}
-        title="Edit Credential"
-        extra={[
-          <Link key="view" href={`/credentials/${data?.id}`}>
-            <Button icon={<EyeOutlined />}>View</Button>
-          </Link>,
-          <Link key="create" href="/credentials/new">
-            <Button icon={<PlusSquareOutlined />}>Add Credential</Button>
-          </Link>,
-        ]}
-      />
+      <PageHeader backIcon={false} title="Create new credential" />
 
       <Form
         {...layout}
@@ -71,7 +41,6 @@ const CredentialsEdit: React.FC = () => {
         <Form.Item
           label="System Id"
           name="systemId"
-          initialValue={data?.email}
           rules={[{ required: true, message: 'Please input system Id!' }]}
         >
           <Input />
@@ -80,7 +49,6 @@ const CredentialsEdit: React.FC = () => {
         <Form.Item
           label="Hotel Name"
           name="hotelName"
-          initialValue={data?.email}
           rules={[{ required: true, message: 'Please input hotel name!' }]}
         >
           <Input />
@@ -89,7 +57,6 @@ const CredentialsEdit: React.FC = () => {
         <Form.Item
           label="Username"
           name="username"
-          initialValue={data?.email}
           rules={[{ required: true, message: 'Please input username!' }]}
         >
           <Input />
@@ -98,7 +65,6 @@ const CredentialsEdit: React.FC = () => {
         <Form.Item
           label="Password"
           name="password"
-          initialValue={data?.email}
           rules={[{ required: true, message: 'Please input password!' }]}
         >
           <Input.Password />
@@ -119,4 +85,4 @@ const CredentialsEdit: React.FC = () => {
   )
 }
 
-export default CredentialsEdit
+export default CredentialsNew
