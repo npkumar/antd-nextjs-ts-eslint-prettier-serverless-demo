@@ -87,7 +87,8 @@ const Index: React.FC = () => {
             showTotal={(total) => `Total ${total}`}
             current={current}
             onChange={(page) => {
-              cache.clear()
+              // TODO: Better way to test this?
+              // cache.clear()
               setCurrent(page)
               router.push({
                 pathname: '/credentials',

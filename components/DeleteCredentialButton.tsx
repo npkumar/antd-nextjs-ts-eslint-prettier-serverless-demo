@@ -2,6 +2,7 @@ import { Modal, Button, notification } from 'antd'
 import React from 'react'
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/router'
+import { mutate } from 'swr'
 const { confirm } = Modal
 interface IndexProps {
   id: string
@@ -31,6 +32,8 @@ const DeleteCredentialButton: React.FC<IndexProps> = ({ id, username }) => {
         })
           .then((result) => {
             // TODO: Revalidate cache
+            // tell all SWRs with this key to revalidate
+            mutate('https://jsonplaceholder.typicode.com/comments')
             console.log(result)
             router.push('/credentials')
             notification.info({
