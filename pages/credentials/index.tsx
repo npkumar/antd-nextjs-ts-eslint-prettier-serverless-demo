@@ -5,6 +5,7 @@ import useSWR, { cache } from 'swr'
 import { DeleteOutlined, EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import Failure from '../../components/Failure'
 
 // @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
 const fetcher = async (input: RequestInfo, init: RequestInit) => {
@@ -36,7 +37,7 @@ const Index: React.FC = () => {
     setCurrent(page)
   }, [page])
 
-  if (error) return <div>Failed to load</div>
+  if (error) return <Failure />
   // if (!data) return <div>Loading...</div>
 
   return (
@@ -95,7 +96,7 @@ const Index: React.FC = () => {
             showTotal={(total) => `Total ${total}`}
             current={current}
             onChange={(page) => {
-              // cache.clear()
+              cache.clear()
               setCurrent(page)
               router.push({
                 pathname: '/credentials',
