@@ -56,7 +56,7 @@ const CredentialsEdit: React.FC = () => {
           <Link key="view" href={`/credentials/${data?.id}`}>
             <Button icon={<EyeOutlined />}>View</Button>
           </Link>,
-          <DeleteCredentialButton key="delete" username={data?.email} />,
+          <DeleteCredentialButton key="delete" id={data?.id} username={data?.email} />,
         ]}
       />
 
