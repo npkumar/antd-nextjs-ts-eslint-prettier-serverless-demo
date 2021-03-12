@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button, Form, Input, PageHeader, Space, notification } from 'antd'
+import { Button, Form, Input, PageHeader, Space, notification, Skeleton } from 'antd'
 import useSWR, { mutate } from 'swr'
 import { EyeOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import DeleteCredentialButton from '../../../components/DeleteCredentialButton'
+import Failure from '../../../components/Failure'
 
 // @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
 const fetcher = async (input: RequestInfo, init: RequestInit) => {
@@ -32,9 +33,9 @@ const CredentialsEdit: React.FC = () => {
     fetcher
   )
 
-  if (error) return <div>Failed to load</div>
+  if (error) return <Failure />
 
-  if (!data) return <div>Loading...</div>
+  if (!data) return <Skeleton active title paragraph={{ rows: 8 }} />
 
   const onFinish = (values: any) => {
     setIsLoading(true)
