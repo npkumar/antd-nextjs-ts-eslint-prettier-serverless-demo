@@ -2,8 +2,9 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { Button, Form, Input, PageHeader, Space } from 'antd'
 import useSWR from 'swr'
-import { EyeOutlined, PlusSquareOutlined } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
 import Link from 'next/link'
+import DeleteCredentialButton from '../../../components/DeleteCredentialButton'
 
 // @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
 const fetcher = async (input: RequestInfo, init: RequestInit) => {
@@ -55,9 +56,7 @@ const CredentialsEdit: React.FC = () => {
           <Link key="view" href={`/credentials/${data?.id}`}>
             <Button icon={<EyeOutlined />}>View</Button>
           </Link>,
-          <Link key="create" href="/credentials/new">
-            <Button icon={<PlusSquareOutlined />}>Add Credential</Button>
-          </Link>,
+          <DeleteCredentialButton key="delete" username={data?.email} />,
         ]}
       />
 

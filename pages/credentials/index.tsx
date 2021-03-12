@@ -2,7 +2,7 @@
 import { Button, Row, List, PageHeader, Space, Col, Input, Pagination, Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
 import useSWR, { cache } from 'swr'
-import { DeleteOutlined, EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons'
+import { EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Failure from '../../components/Failure'
@@ -61,12 +61,6 @@ const Index: React.FC = () => {
           </Row>
         }
         itemLayout="horizontal"
-        // pagination={{
-        //   onChange: (page) => {
-        //     console.log(page)
-        //   },
-        //   pageSize: 6,
-        // }}
         dataSource={data || Array(6).fill(0)}
         renderItem={(item) => (
           <List.Item>
@@ -82,9 +76,6 @@ const Index: React.FC = () => {
                 <Link href={`/credentials/${item.id}/edit`}>
                   <Button icon={<EditOutlined />}>Edit</Button>
                 </Link>
-                <Button danger icon={<DeleteOutlined />}>
-                  Delete
-                </Button>
               </Space>
             </Skeleton>
           </List.Item>
