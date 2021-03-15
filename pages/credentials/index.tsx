@@ -6,6 +6,7 @@ import { EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Failure from '../../components/Failure'
+import omit from 'lodash/omit'
 
 // @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
 const fetcher = async (input: RequestInfo, init: RequestInit) => {
@@ -25,9 +26,12 @@ const Index: React.FC = () => {
       : query.page ?? '1',
     10
   )
+
+  const email = Array.isArray(query.email) ? query.email[0] : query.email
+
   const [current, setCurrent] = useState<number>(page)
   const [totalPages, setTotalPages] = useState<number>(500)
-  const [searchTerm, setSearchTerm] = useState<string>(null)
+  const [searchTerm, setSearchTerm] = useState<string>(email)
 
   const searchUrl = searchTerm
     ? `https://jsonplaceholder.typicode.com/comments?_start=${
@@ -56,6 +60,12 @@ const Index: React.FC = () => {
                 allowClear
                 onSearch={(value) => {
                   setSearchTerm(value)
+                  router.push({
+                    pathname: '/credentials',
+                    query: value
+                      ? { ...query, email: value }
+                      : { ...omit({ ...query }, ['email']) },
+                  })
                 }}
               />
             </Col>

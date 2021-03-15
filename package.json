@@ -12,6 +12,7 @@
     "antd": "^4.11.2",
     "aws-amplify": "^3.3.17",
     "bizcharts": "^4.1.7",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "next": "^10.0.6",
     "next-i18next": "^8.1.0",
