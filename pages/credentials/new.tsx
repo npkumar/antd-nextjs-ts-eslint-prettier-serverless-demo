@@ -1,5 +1,6 @@
-import React from 'react'
-import { Button, Form, Input, PageHeader, Space } from 'antd'
+import React, { useState } from 'react'
+import { Button, Form, Input, notification, PageHeader, Space } from 'antd'
+import { useRouter } from 'next/router'
 
 const layout = {
   labelCol: { span: 4 },
@@ -11,10 +12,38 @@ const tailLayout = {
 }
 
 const CredentialsNew: React.FC = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const router = useRouter()
+
   const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
-    console.log('Success:', values)
+    setIsLoading(true)
+    return new Promise((resolve, reject) => {
+      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
+    })
+      .then(() => {
+        console.log(values)
+        setIsLoading(false)
+
+        // TODO: Redirect to correct Id
+        router.push(`/credentials/1`)
+
+        notification.info({
+          message: 'Successful!',
+          description: `Updated credential`,
+          placement: 'topRight',
+        })
+      })
+      .catch((e) => {
+        console.error(e)
+        setIsLoading(false)
+        notification.error({
+          message: 'Something went wrong!',
+          description: `Could not update`,
+          placement: 'topRight',
+        })
+      })
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -73,7 +102,7 @@ const CredentialsNew: React.FC = () => {
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
-            <Button htmlType="button" onClick={onReset}>
+            <Button htmlType="button" onClick={onReset} loading={isLoading}>
               Reset
             </Button>
           </Space>
