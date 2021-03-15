@@ -18,7 +18,7 @@ const Index: React.FC = () => {
   const router = useRouter()
   const { query } = router
 
-  const page = parseInt(
+  const qPage = parseInt(
     Array.isArray(query.page)
       ? Number.isInteger(query.page[0])
         ? query.page[0]
@@ -27,23 +27,27 @@ const Index: React.FC = () => {
     10
   )
 
-  const email = Array.isArray(query.email) ? query.email[0] : query.email
+  const qEmail = Array.isArray(query.email) ? query.email[0] : query.email
 
-  const [current, setCurrent] = useState<number>(page)
+  const [current, setCurrent] = useState<number>(qPage)
   const [totalPages, setTotalPages] = useState<number>(500)
-  const [searchTerm, setSearchTerm] = useState<string>(email)
+  const [email, setEmail] = useState<string | undefined>()
+  const [searchTerm, setSearchTerm] = useState<string | undefined>()
 
-  const searchUrl = searchTerm
-    ? `https://jsonplaceholder.typicode.com/comments?_start=${
-        current - 1
-      }&_limit=6&email=${searchTerm}`
+  const searchUrl = email
+    ? `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6&email=${email}`
     : `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6`
 
   const { data, error } = useSWR(searchUrl, fetcher)
 
   useEffect(() => {
-    setCurrent(page)
-  }, [page])
+    setCurrent(qPage)
+  }, [qPage])
+
+  useEffect(() => {
+    setEmail(qEmail)
+    setSearchTerm(qEmail)
+  }, [qEmail])
 
   if (error) return <Failure />
   // if (!data) return <div>Loading...</div>
@@ -58,8 +62,13 @@ const Index: React.FC = () => {
               <Input.Search
                 placeholder="Username"
                 allowClear
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value)
+                }}
                 onSearch={(value) => {
-                  setSearchTerm(value)
+                  setEmail(value)
+                  // TODO: Set total pages from response
                   router.push({
                     pathname: '/credentials',
                     query: value
