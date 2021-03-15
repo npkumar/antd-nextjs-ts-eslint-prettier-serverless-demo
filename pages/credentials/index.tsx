@@ -27,11 +27,15 @@ const Index: React.FC = () => {
   )
   const [current, setCurrent] = useState<number>(page)
   const [totalPages, setTotalPages] = useState<number>(500)
+  const [searchTerm, setSearchTerm] = useState<string>(null)
 
-  const { data, error } = useSWR(
-    `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6`,
-    fetcher
-  )
+  const searchUrl = searchTerm
+    ? `https://jsonplaceholder.typicode.com/comments?_start=${
+        current - 1
+      }&_limit=6&email=${searchTerm}`
+    : `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6`
+
+  const { data, error } = useSWR(searchUrl, fetcher)
 
   useEffect(() => {
     setCurrent(page)
@@ -50,7 +54,9 @@ const Index: React.FC = () => {
               <Input.Search
                 placeholder="Username"
                 allowClear
-                onSearch={(value) => console.log(value)}
+                onSearch={(value) => {
+                  setSearchTerm(value)
+                }}
               />
             </Col>
             <Col>
