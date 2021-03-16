@@ -14,7 +14,6 @@ const Index: React.FC = () => {
       <Space direction="vertical" style={{ width: '100%' }}>
         <HotelCard />
         <HotelCard />
-        <HotelCard />
       </Space>
     </>
   )
