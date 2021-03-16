@@ -1,6 +1,6 @@
-import { Result } from 'antd'
-import React from 'react'
-import GoBackHomeButton from './GoBackHomeButton'
+import { Result } from 'antd';
+import React from 'react';
+import GoBackHomeButton from './GoBackHomeButton';
 
 const NotFound: React.FC = () => (
   <Result
@@ -9,6 +9,6 @@ const NotFound: React.FC = () => (
     subTitle="Sorry, the page you requested does not exist."
     extra={<GoBackHomeButton />}
   />
-)
+);
 
-export default NotFound
+export default NotFound;

@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react'
-import { Auth } from 'aws-amplify'
-import { useRouter } from 'next/router'
+import { useState, useEffect } from 'react';
+import { Auth } from 'aws-amplify';
+import { useRouter } from 'next/router';
 
 const Profile: React.FC = () => {
-  const [user, setUser] = useState(null)
-  const router = useRouter()
+  const [user, setUser] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     Auth.currentAuthenticatedUser()
       .then((user) => setUser(user))
       // if there is no authenticated user, redirect to profile page
       .catch(() => {
-        router.push('/')
-        setUser(null)
-      })
-  }, [])
+        router.push('/');
+        setUser(null);
+      });
+  }, []);
 
   return (
     <div>
@@ -25,7 +25,7 @@ const Profile: React.FC = () => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

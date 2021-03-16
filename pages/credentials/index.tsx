@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Button, Row, List, PageHeader, Space, Col, Input, Pagination, Skeleton } from 'antd'
-import React, { useEffect, useState } from 'react'
-import useSWR from 'swr'
-import { EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import Failure from '../../components/Failure'
-import omit from 'lodash/omit'
-import axios from 'axios'
+import { Button, Row, List, PageHeader, Space, Col, Input, Pagination, Skeleton } from 'antd';
+import React, { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import { EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Failure from '../../components/Failure';
+import omit from 'lodash/omit';
+import axios from 'axios';
 
-const fetcher = (url) => axios.get(url).then((res) => res.data)
+const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 const Index: React.FC = () => {
-  const router = useRouter()
-  const { query } = router
+  const router = useRouter();
+  const { query } = router;
 
   const qPage = parseInt(
     Array.isArray(query.page)
@@ -22,30 +22,30 @@ const Index: React.FC = () => {
         : '1'
       : query.page ?? '1',
     10
-  )
+  );
 
-  const qEmail = Array.isArray(query.email) ? query.email[0] : query.email
+  const qEmail = Array.isArray(query.email) ? query.email[0] : query.email;
 
-  const [current, setCurrent] = useState<number>(qPage)
-  const [email, setEmail] = useState<string | undefined>()
-  const [searchTerm, setSearchTerm] = useState<string | undefined>()
+  const [current, setCurrent] = useState<number>(qPage);
+  const [email, setEmail] = useState<string | undefined>();
+  const [searchTerm, setSearchTerm] = useState<string | undefined>();
 
   const searchUrl = email
     ? `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6&email=${email}`
-    : `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6`
+    : `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6`;
 
-  const { data, error } = useSWR(searchUrl, fetcher)
-
-  useEffect(() => {
-    setCurrent(qPage)
-  }, [qPage])
+  const { data, error } = useSWR(searchUrl, fetcher);
 
   useEffect(() => {
-    setEmail(qEmail)
-    setSearchTerm(qEmail)
-  }, [qEmail])
+    setCurrent(qPage);
+  }, [qPage]);
 
-  if (error) return <Failure />
+  useEffect(() => {
+    setEmail(qEmail);
+    setSearchTerm(qEmail);
+  }, [qEmail]);
+
+  if (error) return <Failure />;
   // if (!data) return <div>Loading...</div>
 
   return (
@@ -60,17 +60,17 @@ const Index: React.FC = () => {
                 allowClear
                 value={searchTerm}
                 onChange={(e) => {
-                  setSearchTerm(e.target.value)
+                  setSearchTerm(e.target.value);
                 }}
                 onSearch={(value) => {
-                  setEmail(value)
+                  setEmail(value);
                   // TODO: Set total pages from response
                   router.push({
                     pathname: '/credentials',
                     query: value
                       ? { ...query, email: value }
                       : { ...omit({ ...query }, ['email']) },
-                  })
+                  });
                 }}
               />
             </Col>
@@ -110,11 +110,11 @@ const Index: React.FC = () => {
             onChange={(page) => {
               // TODO: Better way to test this?
               // cache.clear()
-              setCurrent(page)
+              setCurrent(page);
               router.push({
                 pathname: '/credentials',
                 query: { ...query, page },
-              })
+              });
             }}
             total={500}
             showSizeChanger={false}
@@ -123,7 +123,7 @@ const Index: React.FC = () => {
         </Col>
       </Row>
     </div>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;

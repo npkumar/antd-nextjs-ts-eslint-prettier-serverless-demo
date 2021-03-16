@@ -1,58 +1,58 @@
-import React, { useState } from 'react'
-import { Button, Form, Input, notification, PageHeader, Space } from 'antd'
-import { useRouter } from 'next/router'
+import React, { useState } from 'react';
+import { Button, Form, Input, notification, PageHeader, Space } from 'antd';
+import { useRouter } from 'next/router';
 
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 16 },
-}
+};
 
 const tailLayout = {
   wrapperCol: { offset: 4, span: 16 },
-}
+};
 
 const CredentialsNew: React.FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const router = useRouter()
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
-    setIsLoading(true)
+    setIsLoading(true);
     return new Promise((resolve, reject) => {
-      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
+      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
     })
       .then(() => {
-        console.log(values)
-        setIsLoading(false)
+        console.log(values);
+        setIsLoading(false);
 
         // TODO: Redirect to correct Id
-        router.push(`/credentials/1`)
+        router.push(`/credentials/1`);
 
         notification.info({
           message: 'Successful!',
           description: `Updated credential`,
           placement: 'topRight',
-        })
+        });
       })
       .catch((e) => {
-        console.error(e)
-        setIsLoading(false)
+        console.error(e);
+        setIsLoading(false);
         notification.error({
           message: 'Something went wrong!',
           description: `Could not update`,
           placement: 'topRight',
-        })
-      })
-  }
+        });
+      });
+  };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
-  }
+    console.log('Failed:', errorInfo);
+  };
 
   const onReset = () => {
-    form.resetFields()
-  }
+    form.resetFields();
+  };
 
   return (
     <>
@@ -109,7 +109,7 @@ const CredentialsNew: React.FC = () => {
         </Form.Item>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default CredentialsNew
+export default CredentialsNew;

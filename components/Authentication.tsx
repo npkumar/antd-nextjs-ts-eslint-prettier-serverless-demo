@@ -1,4 +1,4 @@
-import { AmplifyAuthenticator, AmplifySignIn, AmplifySignUp } from '@aws-amplify/ui-react'
+import { AmplifyAuthenticator, AmplifySignIn, AmplifySignUp } from '@aws-amplify/ui-react';
 
 const Authentication: React.FC = () => (
   <AmplifyAuthenticator usernameAlias="email">
@@ -18,6 +18,6 @@ const Authentication: React.FC = () => (
     />
     <AmplifySignIn slot="sign-in" usernameAlias="email" />
   </AmplifyAuthenticator>
-)
+);
 
-export default Authentication
+export default Authentication;

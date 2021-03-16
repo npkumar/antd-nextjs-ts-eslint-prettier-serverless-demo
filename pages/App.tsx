@@ -1,13 +1,13 @@
-import Link from 'next/link'
-import Amplify, { Auth } from 'aws-amplify'
-import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import Authentication from '../components/Authentication'
-import LanguageDropdown from '../components/LanguageDropdown'
-import dictionary from '../dictionary'
-import { useRouter } from 'next/router'
-import Head from 'next/head'
-import { Button, Layout, Menu, Row, Col, ConfigProvider } from 'antd'
+import Link from 'next/link';
+import Amplify, { Auth } from 'aws-amplify';
+import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import Authentication from '../components/Authentication';
+import LanguageDropdown from '../components/LanguageDropdown';
+import dictionary from '../amplify/dictionary';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import { Button, Layout, Menu, Row, Col, ConfigProvider } from 'antd';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -16,14 +16,14 @@ import {
   RiseOutlined,
   LogoutOutlined,
   LockOutlined,
-} from '@ant-design/icons'
-import { appWithTranslation } from 'next-i18next'
-import jaJP from 'antd/lib/locale/ja_JP'
-import enGB from 'antd/lib/locale/en_GB'
+} from '@ant-design/icons';
+import { appWithTranslation } from 'next-i18next';
+import jaJP from 'antd/lib/locale/ja_JP';
+import enGB from 'antd/lib/locale/en_GB';
 
-const { Header, Sider, Content } = Layout
+const { Header, Sider, Content } = Layout;
 
-Amplify.I18n.putVocabulariesForLanguage('ja', dictionary)
+Amplify.I18n.putVocabulariesForLanguage('ja', dictionary);
 
 Amplify.configure({
   aws_project_region: process.env.NEXT_PUBLIC_AWS_PROJECT_REGION,
@@ -32,26 +32,26 @@ Amplify.configure({
   aws_user_pools_id: process.env.NEXT_PUBLIC_AWS_USER_POOLS_ID,
   aws_user_pools_web_client_id: process.env.NEXT_PUBLIC_AWS_USER_POOLS_WEB_CLIENT_ID,
   ssr: true,
-})
+});
 
 const MyApp = ({ Component, pageProps }) => {
-  const [authState, setAuthState] = useState(AuthState.SignedOut)
-  const [user, setUser] = useState(null)
-  const [collapsed, setCollapsed] = useState(false)
+  const [authState, setAuthState] = useState(AuthState.SignedOut);
+  const [user, setUser] = useState(null);
+  const [collapsed, setCollapsed] = useState(false);
 
-  const router = useRouter()
-  const { locale, pathname } = router
+  const router = useRouter();
+  const { locale, pathname } = router;
 
   useLayoutEffect(() => {
     return onAuthUIStateChange((nextAuthState, authData) => {
-      setAuthState(nextAuthState)
-      setUser(authData)
-    })
-  }, [])
+      setAuthState(nextAuthState);
+      setUser(authData);
+    });
+  }, []);
 
   useEffect(() => {
-    Amplify.I18n.setLanguage(locale === 'ja' ? 'ja' : 'en')
-  }, [locale])
+    Amplify.I18n.setLanguage(locale === 'ja' ? 'ja' : 'en');
+  }, [locale]);
 
   return authState === AuthState.SignedIn && user ? (
     <ConfigProvider locale={locale === 'ja' ? jaJP : enGB}>
@@ -135,7 +135,7 @@ const MyApp = ({ Component, pageProps }) => {
     </ConfigProvider>
   ) : (
     <Authentication />
-  )
-}
+  );
+};
 
-export default appWithTranslation(MyApp)
+export default appWithTranslation(MyApp);

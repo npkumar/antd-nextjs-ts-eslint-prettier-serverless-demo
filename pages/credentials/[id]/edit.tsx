@@ -1,77 +1,77 @@
-import React, { useState } from 'react'
-import { useRouter } from 'next/router'
-import { Button, Form, Input, PageHeader, Space, notification, Skeleton } from 'antd'
-import useSWR, { mutate } from 'swr'
-import { EyeOutlined } from '@ant-design/icons'
-import Link from 'next/link'
-import DeleteCredentialButton from '../../../components/DeleteCredentialButton'
-import Failure from '../../../components/Failure'
-import axios from 'axios'
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { Button, Form, Input, PageHeader, Space, notification, Skeleton } from 'antd';
+import useSWR, { mutate } from 'swr';
+import { EyeOutlined } from '@ant-design/icons';
+import Link from 'next/link';
+import DeleteCredentialButton from '../../../components/DeleteCredentialButton';
+import Failure from '../../../components/Failure';
+import axios from 'axios';
 
-const fetcher = (url) => axios.get(url).then((res) => res.data)
+const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 16 },
-}
+};
 
 const tailLayout = {
   wrapperCol: { offset: 4, span: 16 },
-}
+};
 
 const CredentialsEdit: React.FC = () => {
-  const router = useRouter()
-  const { query } = router
-  const [form] = Form.useForm()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const router = useRouter();
+  const { query } = router;
+  const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { data, error } = useSWR(
     `https://jsonplaceholder.typicode.com/comments/${query.id}`,
     fetcher
-  )
+  );
 
-  if (error) return <Failure />
+  if (error) return <Failure />;
 
-  if (!data) return <Skeleton active title paragraph={{ rows: 8 }} />
+  if (!data) return <Skeleton active title paragraph={{ rows: 8 }} />;
 
   const onFinish = (values: any) => {
-    setIsLoading(true)
+    setIsLoading(true);
     return new Promise((resolve, reject) => {
-      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
+      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
     })
       .then(() => {
-        console.log(values)
-        setIsLoading(false)
+        console.log(values);
+        setIsLoading(false);
 
         // Revalidate key
-        mutate(`https://jsonplaceholder.typicode.com/comments/${query.id}`)
+        mutate(`https://jsonplaceholder.typicode.com/comments/${query.id}`);
         // And redirect
-        router.push(`/credentials/${query.id}`)
+        router.push(`/credentials/${query.id}`);
 
         notification.info({
           message: 'Successful!',
           description: `Updated credential`,
           placement: 'topRight',
-        })
+        });
       })
       .catch((e) => {
-        console.error(e)
-        setIsLoading(false)
+        console.error(e);
+        setIsLoading(false);
         notification.error({
           message: 'Something went wrong!',
           description: `Could not update`,
           placement: 'topRight',
-        })
-      })
-  }
+        });
+      });
+  };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
-  }
+    console.log('Failed:', errorInfo);
+  };
 
   const onReset = () => {
-    form.resetFields()
-  }
+    form.resetFields();
+  };
 
   return (
     <>
@@ -141,7 +141,7 @@ const CredentialsEdit: React.FC = () => {
         </Form.Item>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default CredentialsEdit
+export default CredentialsEdit;

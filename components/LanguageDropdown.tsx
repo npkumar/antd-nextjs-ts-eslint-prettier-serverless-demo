@@ -1,11 +1,11 @@
-import React, { memo } from 'react'
-import { Button, Dropdown, Menu } from 'antd'
-import Link from 'next/link'
-import { useRouter } from 'next/dist/client/router'
+import React, { memo } from 'react';
+import { Button, Dropdown, Menu } from 'antd';
+import Link from 'next/link';
+import { useRouter } from 'next/dist/client/router';
 
 const LanguageDropdown: React.FC = () => {
-  const router = useRouter()
-  const { locale, pathname, query } = router
+  const router = useRouter();
+  const { locale, pathname, query } = router;
 
   return (
     <Dropdown
@@ -27,7 +27,7 @@ const LanguageDropdown: React.FC = () => {
     >
       <Button>{locale.toUpperCase()}</Button>
     </Dropdown>
-  )
-}
+  );
+};
 
-export default memo(LanguageDropdown)
+export default memo(LanguageDropdown);

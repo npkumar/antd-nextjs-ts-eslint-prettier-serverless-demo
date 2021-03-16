@@ -1,4 +1,4 @@
-import { Translations } from '@aws-amplify/ui-components'
+import { Translations } from '@aws-amplify/ui-components';
 
 // https://github.com/aws-amplify/amplify-js/blob/main/packages/amplify-ui-components/src/common/Translations.ts
 const vocabularies = {
@@ -16,6 +16,6 @@ const vocabularies = {
   [Translations.SIGN_IN_HEADER_TEXT]: 'ログイン',
   [Translations.SIGN_UP_HAVE_ACCOUNT_TEXT]: 'アカウントを持っています？',
   [Translations.NO_ACCOUNT_TEXT]: 'アカウントテキストなし',
-}
+};
 
-export default vocabularies
+export default vocabularies;

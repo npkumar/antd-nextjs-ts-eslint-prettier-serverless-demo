@@ -1,5 +1,5 @@
-import { Result } from 'antd'
-import GoBackHomeButton from '../components/GoBackHomeButton'
+import { Result } from 'antd';
+import GoBackHomeButton from '../components/GoBackHomeButton';
 
 const Custom404: React.FC = () => (
   <Result
@@ -8,6 +8,6 @@ const Custom404: React.FC = () => (
     subTitle="Sorry, the page you visited does not exist."
     extra={<GoBackHomeButton />}
   />
-)
+);
 
-export default Custom404
+export default Custom404;
