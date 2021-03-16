@@ -3,7 +3,6 @@ import { Button, Dropdown, Menu } from 'antd'
 import Link from 'next/link'
 import { useRouter } from 'next/dist/client/router'
 
-// https://github.com/vercel/next.js/blob/master/errors/href-interpolation-failed.md
 const LanguageDropdown: React.FC = () => {
   const router = useRouter()
   const { locale, pathname, query } = router
