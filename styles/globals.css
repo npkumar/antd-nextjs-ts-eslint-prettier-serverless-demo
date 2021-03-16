@@ -15,12 +15,20 @@ a {
   box-sizing: border-box;
 }
 
+/* Amplify */
 :root {
   --amplify-primary-color: #0083e8;
   --amplify-primary-tint: #006ec2;
   --amplify-primary-shade: #006ec2;
 }
 
+/* Ant Design */
+.ant-layout-header {
+  z-index: 3 !important
+}
+
+/* App */
+/* TODO: Move to own scss module */
 .trigger {
   padding: 0 24px;
   font-size: 18px;
@@ -43,28 +51,3 @@ a {
   background: #fff;
 }
 
-
-.events {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.events .ant-badge-status {
-  width: 100%;
-  overflow: hidden;
-  font-size: 12px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.notes-month {
-  font-size: 28px;
-  text-align: center;
-}
-.notes-month section {
-  font-size: 28px;
-}
-
-.ant-layout-header {
-  z-index: 3 !important
-}
