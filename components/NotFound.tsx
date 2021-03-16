@@ -10,7 +10,7 @@ const NotFound: React.FC = () => {
       subTitle="Sorry, the page you requested does not exist."
       extra={
         <Link href="/">
-          <Button type="primary">Back to dashboard</Button>
+          <Button type="primary">Go back to Kakaku</Button>
         </Link>
       }
     />
