@@ -37,7 +37,7 @@ const DeleteCredentialButton: React.FC<IndexProps> = ({ id, username }) => {
             username: username,
           }),
         })
-          .then((result) => {
+          .then(() => {
             // TODO: Revalidate cache and take back to last screen?
             invalidateCredentialsCache()
             router.push('/credentials')

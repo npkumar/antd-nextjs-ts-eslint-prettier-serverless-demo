@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Button, Row, List, PageHeader, Space, Col, Input, Pagination, Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
-import useSWR, { cache } from 'swr'
+import useSWR from 'swr'
 import { EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Failure from '../../components/Failure'
 import omit from 'lodash/omit'
+import axios from 'axios'
 
-// @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
-const fetcher = async (input: RequestInfo, init: RequestInit) => {
-  const res = await fetch(input, init)
-  return res.json()
-}
+const fetcher = (url) => axios.get(url).then((res) => res.data)
 
 const Index: React.FC = () => {
   const router = useRouter()
@@ -30,7 +27,6 @@ const Index: React.FC = () => {
   const qEmail = Array.isArray(query.email) ? query.email[0] : query.email
 
   const [current, setCurrent] = useState<number>(qPage)
-  const [totalPages, setTotalPages] = useState<number>(500)
   const [email, setEmail] = useState<string | undefined>()
   const [searchTerm, setSearchTerm] = useState<string | undefined>()
 
@@ -120,7 +116,7 @@ const Index: React.FC = () => {
                 query: { ...query, page },
               })
             }}
-            total={totalPages}
+            total={500}
             showSizeChanger={false}
             showQuickJumper={false}
           />

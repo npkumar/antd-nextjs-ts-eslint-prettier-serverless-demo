@@ -6,12 +6,9 @@ import { EyeOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import DeleteCredentialButton from '../../../components/DeleteCredentialButton'
 import Failure from '../../../components/Failure'
+import axios from 'axios'
 
-// @see https://stackoverflow.com/questions/64199630/problem-with-typescript-while-making-request-to-swr
-const fetcher = async (input: RequestInfo, init: RequestInit) => {
-  const res = await fetch(input, init)
-  return res.json()
-}
+const fetcher = (url) => axios.get(url).then((res) => res.data)
 
 const layout = {
   labelCol: { span: 4 },

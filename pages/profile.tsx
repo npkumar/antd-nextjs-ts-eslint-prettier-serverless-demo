@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Auth } from 'aws-amplify'
 import { useRouter } from 'next/router'
 
-const Profile = () => {
+const Profile: React.FC = () => {
   const [user, setUser] = useState(null)
   const router = useRouter()
 
