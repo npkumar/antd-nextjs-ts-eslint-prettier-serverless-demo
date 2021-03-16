@@ -12,7 +12,7 @@ export default async (req, res) => {
     const user = await Auth.currentAuthenticatedUser()
     res.json({ user })
   } catch (err) {
-    res.statusCode = 200
+    res.statusCode = 403
     res.json({ user: null })
   }
 }
