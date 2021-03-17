@@ -9,7 +9,7 @@ const Profile: React.FC = () => {
   useEffect(() => {
     Auth.currentAuthenticatedUser()
       .then((user) => setUser(user))
-      // if there is no authenticated user, redirect to profile page
+      // If there is no authenticated user, redirect to profile page
       .catch(() => {
         router.push('/');
         setUser(null);

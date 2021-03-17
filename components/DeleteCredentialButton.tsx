@@ -31,7 +31,6 @@ const DeleteCredentialButton: React.FC<IndexProps> = ({ id, username }) => {
             'Content-Type': 'application/json',
           },
 
-          //make sure to serialize your JSON body
           body: JSON.stringify({
             id: id,
             username: username,

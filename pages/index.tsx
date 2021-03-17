@@ -7,9 +7,7 @@ const Index: React.FC = () => {
   const { t } = useTranslation('dashboard');
 
   return (
-    <>
-      <PageHeader backIcon={false} title={t('header.title')} subTitle="Description for dashboard" />
-    </>
+    <PageHeader backIcon={false} title={t('header.title')} subTitle="Description for dashboard" />
   );
 };
 

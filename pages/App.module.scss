@@ -1,0 +1,54 @@
+.sider {
+    overflow: auto;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+}
+
+.header {
+    background: #fff;
+    position: fixed;
+    z-index: 1;
+    padding: 0;
+    width: calc(100% - 200px);
+
+    > div {
+        margin-right: 16px;
+    }
+}
+
+.header--collapsed {
+    width: calc(100% - 80px);
+}
+
+.layout {
+    margin-left: 200px;
+}
+
+.layout--collapsed {
+    margin-left: 80px;
+}
+
+.content {
+    background: #fff;
+    margin: 80px 16px 24px 16px;
+    padding: 24px;
+}
+
+.trigger {
+    padding: 0 24px;
+    font-size: 18px;
+    line-height: 64px;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &:hover {
+        color: #1890ff;
+    }
+}
+
+.logo {
+    height: 32px;
+    margin: 16px;
+    background: rgba(255, 255, 255, 0.3);
+}

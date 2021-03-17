@@ -50,7 +50,7 @@ const CredentialsEdit: React.FC = () => {
 
         notification.info({
           message: 'Successful!',
-          description: `Updated credential`,
+          description: 'Updated credential',
           placement: 'topRight',
         });
       })
@@ -59,7 +59,7 @@ const CredentialsEdit: React.FC = () => {
         setIsLoading(false);
         notification.error({
           message: 'Something went wrong!',
-          description: `Could not update`,
+          description: 'Could not update',
           placement: 'topRight',
         });
       });

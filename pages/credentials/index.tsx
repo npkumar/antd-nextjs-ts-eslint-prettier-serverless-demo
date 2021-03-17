@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Button, Row, List, PageHeader, Space, Col, Input, Pagination, Skeleton } from 'antd';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
@@ -11,45 +10,36 @@ import axios from 'axios';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
+const getQueryValue = (value): string | undefined => (Array.isArray(value) ? value[0] : value);
+
 const Index: React.FC = () => {
   const router = useRouter();
   const { query } = router;
 
-  const qPage = parseInt(
-    Array.isArray(query.page)
-      ? Number.isInteger(query.page[0])
-        ? query.page[0]
-        : '1'
-      : query.page ?? '1',
-    10
-  );
-
-  const qEmail = Array.isArray(query.email) ? query.email[0] : query.email;
+  const qPage = parseInt(getQueryValue(query.page) ? query.page[0] : '1', 10);
+  const qSearch = getQueryValue(query.search);
 
   const [current, setCurrent] = useState<number>(qPage);
-  const [email, setEmail] = useState<string | undefined>();
+  const [search, setSearch] = useState<string | undefined>(qSearch);
   const [searchTerm, setSearchTerm] = useState<string | undefined>();
 
-  const searchUrl = email
-    ? `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6&email=${email}`
-    : `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6`;
+  let searchUrl = `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6`;
+  if (search) {
+    searchUrl += `&email=${search}`;
+  }
 
   const { data, error } = useSWR(searchUrl, fetcher);
 
+  useEffect(() => setCurrent(qPage), [qPage]);
   useEffect(() => {
-    setCurrent(qPage);
-  }, [qPage]);
-
-  useEffect(() => {
-    setEmail(qEmail);
-    setSearchTerm(qEmail);
-  }, [qEmail]);
+    setSearch(qSearch);
+    setSearchTerm(qSearch);
+  }, [qSearch]);
 
   if (error) return <Failure />;
-  // if (!data) return <div>Loading...</div>
 
   return (
-    <div>
+    <>
       <PageHeader backIcon={false} title="Credentials" subTitle="Credentials description" />
       <List
         header={
@@ -59,17 +49,15 @@ const Index: React.FC = () => {
                 placeholder="Username"
                 allowClear
                 value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                }}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 onSearch={(value) => {
-                  setEmail(value);
+                  setSearch(value);
                   // TODO: Set total pages from response
                   router.push({
                     pathname: '/credentials',
                     query: value
-                      ? { ...query, email: value }
-                      : { ...omit({ ...query }, ['email']) },
+                      ? { ...query, search: value }
+                      : { ...omit({ ...query }, ['search']) },
                   });
                 }}
               />
@@ -82,6 +70,7 @@ const Index: React.FC = () => {
           </Row>
         }
         itemLayout="horizontal"
+        // Shows a skeleton of 6 list items if data is being loaded
         dataSource={data || Array(6).fill(0)}
         renderItem={(item) => (
           <List.Item>
@@ -108,21 +97,20 @@ const Index: React.FC = () => {
             showTotal={(total) => `Total ${total}`}
             current={current}
             onChange={(page) => {
-              // TODO: Better way to test this?
-              // cache.clear()
               setCurrent(page);
               router.push({
                 pathname: '/credentials',
                 query: { ...query, page },
               });
             }}
+            // TODO: Set total pages from response
             total={500}
             showSizeChanger={false}
             showQuickJumper={false}
           />
         </Col>
       </Row>
-    </div>
+    </>
   );
 };
 
