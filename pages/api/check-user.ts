@@ -1,10 +1,9 @@
-import Amplify, { withSSRContext } from 'aws-amplify';
+import { withSSRContext } from '../../amplify';
 import { NextApiRequest, NextApiResponse } from 'next';
-import awsCongnitoConfig from '../../amplify/config';
-
-Amplify.configure({ ...awsCongnitoConfig });
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  // @see https://docs.amplify.aws/lib/ssr/q/platform/js
+  // @see https://github.com/aws-amplify/amplify-js/pull/6146
   const { Auth } = withSSRContext({ req });
   try {
     const user = await Auth.currentAuthenticatedUser();

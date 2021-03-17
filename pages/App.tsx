@@ -1,10 +1,8 @@
 import Link from 'next/link';
-import Amplify, { Auth } from 'aws-amplify';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Authentication from '../components/Authentication';
 import LanguageDropdown from '../components/LanguageDropdown';
-import dictionary from '../amplify/dictionary';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Button, Layout, Menu, Row, Col, ConfigProvider } from 'antd';
@@ -20,13 +18,9 @@ import {
 import { appWithTranslation } from 'next-i18next';
 import jaJP from 'antd/lib/locale/ja_JP';
 import enGB from 'antd/lib/locale/en_GB';
-import awsCongnitoConfig from '../amplify/config';
+import Amplify, { Auth } from '../amplify';
 
 const { Header, Sider, Content } = Layout;
-
-Amplify.I18n.putVocabulariesForLanguage('ja', dictionary);
-
-Amplify.configure({ ...awsCongnitoConfig });
 
 const MyApp = ({ Component, pageProps }) => {
   const [authState, setAuthState] = useState(AuthState.SignedOut);
