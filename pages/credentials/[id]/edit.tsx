@@ -7,6 +7,8 @@ import Link from 'next/link';
 import DeleteCredentialButton from '../../../components/DeleteCredentialButton';
 import Failure from '../../../components/Failure';
 import axios from 'axios';
+import CredentialStatus from '../../../components/CredentialStatus';
+import { HOTEL_CREDENTIAL_STATUS } from '../../../types/credentials';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
@@ -26,7 +28,7 @@ const CredentialsEdit: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { data, error } = useSWR(
-    `https://jsonplaceholder.typicode.com/comments/${query.id}`,
+    `http://localhost:8080/api/v0.1/hotelcredentials/${query.id}`,
     fetcher
   );
 
@@ -36,15 +38,13 @@ const CredentialsEdit: React.FC = () => {
 
   const onFinish = (values: any) => {
     setIsLoading(true);
-    return new Promise((resolve, reject) => {
-      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-    })
+    axios
+      .put(`http://localhost:8080/api/v0.1/hotelcredentials/${query.id}`, { ...values })
       .then(() => {
-        console.log(values);
         setIsLoading(false);
 
         // Revalidate key
-        mutate(`https://jsonplaceholder.typicode.com/comments/${query.id}`);
+        mutate(`http://localhost:8080/api/v0.1/hotelcredentials/${query.id}`);
         // And redirect
         router.push(`/credentials/${query.id}`);
 
@@ -54,8 +54,7 @@ const CredentialsEdit: React.FC = () => {
           placement: 'topRight',
         });
       })
-      .catch((e) => {
-        console.error(e);
+      .catch(() => {
         setIsLoading(false);
         notification.error({
           message: 'Something went wrong!',
@@ -65,66 +64,55 @@ const CredentialsEdit: React.FC = () => {
       });
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
-
-  const onReset = () => {
-    form.resetFields();
-  };
-
   return (
     <>
       <PageHeader
         backIcon={false}
         title="Edit Credential"
         extra={[
-          <Link key="view" href={`/credentials/${data?.id}`}>
+          <CredentialStatus key="status" status={data.status} />,
+          <Link key="view" href={`/credentials/${data.id}`}>
             <Button icon={<EyeOutlined />}>View</Button>
           </Link>,
-          <DeleteCredentialButton key="delete" id={data?.id} username={data?.email} />,
+          data.status === HOTEL_CREDENTIAL_STATUS.ACTIVE && (
+            <DeleteCredentialButton key="delete" id={data?.id} hotelName={data?.hotelName} />
+          ),
         ]}
       />
 
-      <Form
-        {...layout}
-        form={form}
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item
-          label="System Id"
-          name="systemId"
-          initialValue={data?.email}
-          rules={[{ required: true, message: 'Please input system Id!' }]}
-        >
-          <Input />
-        </Form.Item>
-
+      <Form {...layout} form={form} initialValues={{ remember: true }} onFinish={onFinish}>
         <Form.Item
           label="Hotel Name"
           name="hotelName"
-          initialValue={data?.email}
+          initialValue={data.hotelName}
           rules={[{ required: true, message: 'Please input hotel name!' }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="Username"
-          name="username"
-          initialValue={data?.email}
-          rules={[{ required: true, message: 'Please input username!' }]}
+          label="System Id"
+          name="systemId"
+          initialValue={data.systemId}
+          rules={[{ required: true, message: 'Please input system Id!' }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="Password"
-          name="password"
-          initialValue={data?.email}
-          rules={[{ required: true, message: 'Please input password!' }]}
+          label="PMS User Id"
+          name="pmsUserId"
+          initialValue={data.pmsUserId}
+          rules={[{ required: true, message: 'Please input PMS User Id!' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="PMS Password"
+          name="pmsPassword"
+          initialValue={data?.pmsPassword}
+          rules={[{ required: true, message: 'Please input PMS password!' }]}
         >
           <Input.Password />
         </Form.Item>
@@ -134,7 +122,7 @@ const CredentialsEdit: React.FC = () => {
             <Button type="primary" htmlType="submit" loading={isLoading}>
               Submit
             </Button>
-            <Button htmlType="button" onClick={onReset}>
+            <Button htmlType="button" onClick={() => form.resetFields()}>
               Reset
             </Button>
           </Space>

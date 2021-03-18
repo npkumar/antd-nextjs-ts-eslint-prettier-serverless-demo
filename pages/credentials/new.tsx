@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, notification, PageHeader, Space } from 'antd';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const layout = {
   labelCol: { span: 4 },
@@ -19,15 +20,13 @@ const CredentialsNew: React.FC = () => {
 
   const onFinish = (values: any) => {
     setIsLoading(true);
-    return new Promise((resolve, reject) => {
-      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-    })
-      .then(() => {
-        console.log(values);
+
+    axios
+      .post('http://localhost:8080/api/v0.1/hotelcredentials', { ...values })
+      .then((result) => {
         setIsLoading(false);
 
-        // TODO: Redirect to correct Id
-        router.push(`/credentials/1`);
+        router.push(`/credentials/${result.data.id}`);
 
         notification.info({
           message: 'Successful!',
@@ -35,8 +34,7 @@ const CredentialsNew: React.FC = () => {
           placement: 'topRight',
         });
       })
-      .catch((e) => {
-        console.error(e);
+      .catch(() => {
         setIsLoading(false);
         notification.error({
           message: 'Something went wrong!',
@@ -46,33 +44,11 @@ const CredentialsNew: React.FC = () => {
       });
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
-
-  const onReset = () => {
-    form.resetFields();
-  };
-
   return (
     <>
       <PageHeader backIcon={false} title="Create new credential" />
 
-      <Form
-        {...layout}
-        form={form}
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item
-          label="System Id"
-          name="systemId"
-          rules={[{ required: true, message: 'Please input system Id!' }]}
-        >
-          <Input />
-        </Form.Item>
-
+      <Form {...layout} form={form} initialValues={{ remember: true }} onFinish={onFinish}>
         <Form.Item
           label="Hotel Name"
           name="hotelName"
@@ -82,17 +58,25 @@ const CredentialsNew: React.FC = () => {
         </Form.Item>
 
         <Form.Item
-          label="Username"
-          name="username"
-          rules={[{ required: true, message: 'Please input username!' }]}
+          label="System Id"
+          name="systemId"
+          rules={[{ required: true, message: 'Please input system Id!' }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="Password"
-          name="password"
-          rules={[{ required: true, message: 'Please input password!' }]}
+          label="PMS User Id"
+          name="pmsUserId"
+          rules={[{ required: true, message: 'Please input PMS User Id!' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="PMS Password"
+          name="pmsPassword"
+          rules={[{ required: true, message: 'Please input PMS Password!' }]}
         >
           <Input.Password />
         </Form.Item>
@@ -102,7 +86,7 @@ const CredentialsNew: React.FC = () => {
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
-            <Button htmlType="button" onClick={onReset} loading={isLoading}>
+            <Button htmlType="button" onClick={() => form.resetFields()} loading={isLoading}>
               Reset
             </Button>
           </Space>

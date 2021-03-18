@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import Failure from '../../components/Failure';
 import omit from 'lodash/omit';
 import axios from 'axios';
+import { HOTEL_CREDENTIALS } from '../../types/credentials';
+import CredentialStatus from '../../components/CredentialStatus';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
@@ -22,21 +24,32 @@ const Index: React.FC = () => {
   const [current, setCurrent] = useState<number>(qPage);
   const [search, setSearch] = useState<string | undefined>(qSearch);
   const [searchTerm, setSearchTerm] = useState<string | undefined>();
+  const [totalPages, setTotalPages] = useState<number>(1);
 
-  let searchUrl = `https://jsonplaceholder.typicode.com/comments?_start=${current - 1}&_limit=6`;
+  const pageSize = 6;
+  let searchUrl = `http://localhost:8080/api/v0.1/hotelcredentials?page=${
+    current - 1
+  }&size=${pageSize}`;
   if (search) {
-    searchUrl += `&email=${search}`;
+    searchUrl += `&hotelName=${search}`;
   }
 
   const { data, error } = useSWR(searchUrl, fetcher);
 
   useEffect(() => setCurrent(qPage), [qPage]);
+
   useEffect(() => {
     setSearch(qSearch);
     setSearchTerm(qSearch);
   }, [qSearch]);
 
+  useEffect(() => {
+    setTotalPages(isNaN(data?.totalPages) ? 1 : data?.totalPages * pageSize);
+  }, [data?.totalPages]);
+
   if (error) return <Failure />;
+
+  const content: HOTEL_CREDENTIALS[] | undefined = data?.content;
 
   return (
     <>
@@ -46,13 +59,12 @@ const Index: React.FC = () => {
           <Row justify="end" gutter={8}>
             <Col>
               <Input.Search
-                placeholder="Username"
+                placeholder="Hotel Name"
                 allowClear
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onSearch={(value) => {
                   setSearch(value);
-                  // TODO: Set total pages from response
                   router.push({
                     pathname: '/credentials',
                     query: value
@@ -70,19 +82,17 @@ const Index: React.FC = () => {
           </Row>
         }
         itemLayout="horizontal"
-        // Shows a skeleton of 6 list items if data is being loaded
-        dataSource={data || Array(6).fill(0)}
+        // Shows a skeleton of pageSize list items if data is being loaded
+        dataSource={content || Array(pageSize).fill(0)}
         renderItem={(item) => (
           <List.Item>
             <Skeleton title={false} loading={!data} active>
-              {/* @ts-ignore */}
-              <List.Item.Meta title={item.email} description={item.name} />
+              <List.Item.Meta title={item.hotelName} description={item.pmsUserId} />
               <Space>
-                {/* @ts-ignore */}
+                <CredentialStatus status={item.status} />
                 <Link href={`/credentials/${item.id}`}>
                   <Button icon={<EyeOutlined />}>View</Button>
                 </Link>
-                {/* @ts-ignore */}
                 <Link href={`/credentials/${item.id}/edit`}>
                   <Button icon={<EditOutlined />}>Edit</Button>
                 </Link>
@@ -94,7 +104,6 @@ const Index: React.FC = () => {
       <Row justify="center">
         <Col>
           <Pagination
-            showTotal={(total) => `Total ${total}`}
             current={current}
             onChange={(page) => {
               setCurrent(page);
@@ -103,8 +112,7 @@ const Index: React.FC = () => {
                 query: { ...query, page },
               });
             }}
-            // TODO: Set total pages from response
-            total={500}
+            total={totalPages}
             showSizeChanger={false}
             showQuickJumper={false}
           />

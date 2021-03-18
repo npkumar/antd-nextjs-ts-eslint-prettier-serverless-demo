@@ -8,6 +8,8 @@ import { EditOutlined } from '@ant-design/icons';
 import DeleteCredentialButton from '../../../components/DeleteCredentialButton';
 import Failure from '../../../components/Failure';
 import axios from 'axios';
+import CredentialStatus from '../../../components/CredentialStatus';
+import { HOTEL_CREDENTIAL_STATUS } from '../../../types/credentials';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
@@ -21,7 +23,7 @@ const CredentialsView: React.FC = () => {
   const { query } = router;
 
   const { data, error } = useSWR(
-    `https://jsonplaceholder.typicode.com/comments/${query.id}`,
+    `http://localhost:8080/api/v0.1/hotelcredentials/${query.id}`,
     fetcher
   );
 
@@ -35,27 +37,30 @@ const CredentialsView: React.FC = () => {
         backIcon={false}
         title="View Credential"
         extra={[
-          <Link key="edit" href={`/credentials/${data?.id}/edit`}>
+          <CredentialStatus key="status" status={data.status} />,
+          <Link key="edit" href={`/credentials/${data.id}/edit`}>
             <Button icon={<EditOutlined />}>Edit</Button>
           </Link>,
-          <DeleteCredentialButton key="delete" id={data?.id} username={data?.email} />,
+          data.status === HOTEL_CREDENTIAL_STATUS.ACTIVE && (
+            <DeleteCredentialButton key="delete" id={data?.id} hotelName={data?.hotelName} />
+          ),
         ]}
       />
 
       <Form {...layout}>
-        <Form.Item label="System Id">
-          <Text>{data?.email}</Text>
-        </Form.Item>
-
         <Form.Item label="Hotel Name">
-          <Text>{data?.email}</Text>
+          <Text>{data.hotelName}</Text>
         </Form.Item>
 
-        <Form.Item label="Username">
-          <Text>{data?.email}</Text>
+        <Form.Item label="System Id">
+          <Text>{data.systemId}</Text>
         </Form.Item>
 
-        <Form.Item label="Password">
+        <Form.Item label="PMS User Id">
+          <Text>{data.pmsUserId}</Text>
+        </Form.Item>
+
+        <Form.Item label="PMS Password">
           <Text mark>*********</Text>
         </Form.Item>
       </Form>

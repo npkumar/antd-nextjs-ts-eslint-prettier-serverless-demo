@@ -3,54 +3,47 @@ import React from 'react';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { mutate, cache } from 'swr';
+import axios from 'axios';
 const { confirm } = Modal;
 interface IndexProps {
   id: string;
-  username: string;
+  hotelName: string;
 }
 
 const invalidateCredentialsCache = () => {
   cache
     .keys()
-    .filter((key) => key.includes('comments'))
+    .filter((key) => key.includes('credentials'))
     .forEach((key) => mutate(key));
 };
 
-const DeleteCredentialButton: React.FC<IndexProps> = ({ id, username }) => {
+const DeleteCredentialButton: React.FC<IndexProps> = ({ id, hotelName }) => {
   const router = useRouter();
   const showPromiseConfirm = () => {
     confirm({
       title: 'Do you want to delete this credential?',
       icon: <ExclamationCircleOutlined />,
-      content: `${username} will be deleted`,
+      content: `${hotelName} will be deleted`,
+      cancelText: 'Cancel',
+      okText: 'Confirm',
       onOk() {
-        return fetch('https://jsonplaceholder.typicode.com/comments/1', {
-          method: 'put',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-
-          body: JSON.stringify({
-            id: id,
-            username: username,
-          }),
-        })
+        axios
+          .delete(`http://localhost:8080/api/v0.1/hotelcredentials/${id}`)
           .then(() => {
-            // TODO: Revalidate cache and take back to last screen?
+            // TODO: Revalidate cache
             invalidateCredentialsCache();
-            router.push('/credentials');
+            // Redirect to view page, status should be inactive now
+            router.push(`/credentials/${id}`);
             notification.info({
               message: 'Successful!',
-              description: `Deleted credential ${username}`,
+              description: `Deleted credential ${hotelName}`,
               placement: 'topRight',
             });
           })
-          .catch((e) => {
-            console.error(e);
+          .catch(() => {
             notification.error({
               message: 'Something went wrong!',
-              description: `Could not delete ${username}`,
+              description: `Could not delete ${hotelName}`,
               placement: 'topRight',
             });
           });
