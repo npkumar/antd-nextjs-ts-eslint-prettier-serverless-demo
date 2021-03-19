@@ -1,26 +1,28 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse, NextApiRequest } from 'next';
 import nextConnect from 'next-connect';
+import congnitoMiddleware from './middleware/cognitoMiddleware';
+import credentialWithCognitoMiddleware from './middleware/credentialWithCognitoMiddleware';
+import { NextApiRequestHotelCredentialWithCognito, NextApiRequestWithCongito } from './types';
 
-export interface NextApiRequestExtended extends NextApiRequest {
-  email: number | null;
-  group: string | null;
-  credentialId: string | null;
+const nextConnectConfig = {
+  onError(error, req, res) {
+    res.status(500).json({ error: `Something happened, ${error.message}` });
+  },
+  onNoMatch(req, res) {
+    res.status(405).json({ error: `Method ${req.method} Not Allowed` });
+  },
 };
 
-const getAPIHandler = () => {
-  return nextConnect<NextApiRequestExtended, NextApiResponse>({
-    onError(error, req, res) {
-      res.status(500).json({ error: `Something happened, ${error.message}` });
-    },
-    onNoMatch(req, res) {
-      res.status(405).json({ error: `Method ${req.method} Not Allowed` });
-    },
-  }).use((req, res, next) => {
-    req.email = null;
-    req.group = null;
-    req.credentialId = Array.isArray(req.query?.id) ? req.query?.id[0] : req.query?.id ?? null;
-    next();
-  });
-};
+const getAPIHandler = () => nextConnect<NextApiRequest, NextApiResponse>(nextConnectConfig);
+
+export const getAPIHandlerWithCongnito = () =>
+  nextConnect<NextApiRequestWithCongito, NextApiResponse>(nextConnectConfig).use(
+    congnitoMiddleware
+  );
+
+export const getAPIHandlerCredentialWithCongnito = () =>
+  nextConnect<NextApiRequestHotelCredentialWithCognito, NextApiResponse>(nextConnectConfig).use(
+    credentialWithCognitoMiddleware
+  );
 
 export default getAPIHandler;
