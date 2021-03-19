@@ -4,11 +4,11 @@ import useSWR from 'swr';
 import { EditOutlined, EyeOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import Failure from '../../components/Failure';
+import Failure from '../../client/components/Failure';
 import omit from 'lodash/omit';
 import axios from 'axios';
-import { HOTEL_CREDENTIALS } from '../../types/credentials';
-import CredentialStatus from '../../components/CredentialStatus';
+import { HOTEL_CREDENTIALS } from '../../client/types/credentials';
+import CredentialStatus from '../../client/components/CredentialStatus';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 

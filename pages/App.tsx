@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import Authentication from '../components/Authentication';
-import LanguageDropdown from '../components/LanguageDropdown';
+import Authentication from '../client/components/Authentication';
+import LanguageDropdown from '../client/components/LanguageDropdown';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import classNames from 'classnames';

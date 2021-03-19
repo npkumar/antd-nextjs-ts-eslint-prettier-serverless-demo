@@ -5,11 +5,11 @@ import useSWR from 'swr';
 import Text from 'antd/lib/typography/Text';
 import Link from 'next/link';
 import { EditOutlined } from '@ant-design/icons';
-import DeleteCredentialButton from '../../../components/DeleteCredentialButton';
-import Failure from '../../../components/Failure';
+import DeleteCredentialButton from '../../../client/components/DeleteCredentialButton';
+import Failure from '../../../client/components/Failure';
 import axios from 'axios';
-import CredentialStatus from '../../../components/CredentialStatus';
-import { HOTEL_CREDENTIAL_STATUS } from '../../../types/credentials';
+import CredentialStatus from '../../../client/components/CredentialStatus';
+import { HOTEL_CREDENTIAL_STATUS } from '../../../client/types/credentials';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
@@ -22,10 +22,7 @@ const CredentialsView: React.FC = () => {
   const router = useRouter();
   const { query } = router;
 
-  const { data, error } = useSWR(
-    `/api/hotelcredentials/${query.id}`,
-    fetcher
-  );
+  const { data, error } = useSWR(`/api/hotelcredentials/${query.id}`, fetcher);
 
   if (error) return <Failure />;
 

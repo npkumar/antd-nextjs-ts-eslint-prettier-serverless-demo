@@ -4,11 +4,11 @@ import { Button, Form, Input, PageHeader, Space, notification, Skeleton } from '
 import useSWR, { mutate } from 'swr';
 import { EyeOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import DeleteCredentialButton from '../../../components/DeleteCredentialButton';
-import Failure from '../../../components/Failure';
+import DeleteCredentialButton from '../../../client/components/DeleteCredentialButton';
+import Failure from '../../../client/components/Failure';
 import axios from 'axios';
-import CredentialStatus from '../../../components/CredentialStatus';
-import { HOTEL_CREDENTIAL_STATUS } from '../../../types/credentials';
+import CredentialStatus from '../../../client/components/CredentialStatus';
+import { HOTEL_CREDENTIAL_STATUS } from '../../../client/types/credentials';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 

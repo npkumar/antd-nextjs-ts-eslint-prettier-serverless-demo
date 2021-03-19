@@ -1,5 +1,5 @@
 import { Result } from 'antd';
-import GoBackHomeButton from '../components/GoBackHomeButton';
+import GoBackHomeButton from '../client/components/GoBackHomeButton';
 
 const Custom404: React.FC = () => (
   <Result
