@@ -1,7 +1,7 @@
 import axios from 'axios';
+import getConfig from '../../../server/config';
 import { getAPIHandlerCredentialWithCongnito } from '../../../server/handler';
-
-const endpoint = 'http://localhost:8080/api/v0.1/hotelcredentials';
+const { hotelCredentialsEndpoint: endpoint } = getConfig();
 
 export default getAPIHandlerCredentialWithCongnito()
   .get(async (req, res) => {

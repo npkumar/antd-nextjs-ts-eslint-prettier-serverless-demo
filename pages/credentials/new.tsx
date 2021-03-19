@@ -30,7 +30,7 @@ const CredentialsNew: React.FC = () => {
 
         notification.info({
           message: 'Successful!',
-          description: `Updated credential`,
+          description: `Created credential`,
           placement: 'topRight',
         });
       })
@@ -38,7 +38,7 @@ const CredentialsNew: React.FC = () => {
         setIsLoading(false);
         notification.error({
           message: 'Something went wrong!',
-          description: `Could not update`,
+          description: `Could not create`,
           placement: 'topRight',
         });
       });

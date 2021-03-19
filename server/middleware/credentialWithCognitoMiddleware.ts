@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next';
-import { NextApiRequestHotelCredentialWithCognito } from './../types';
+import { NextApiRequestHotelCredentialWithCognito } from '../types';
 
 const credentialWithCognitoMiddleware = (
   req: NextApiRequestHotelCredentialWithCognito,
