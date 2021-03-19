@@ -22,7 +22,7 @@ const CredentialsNew: React.FC = () => {
     setIsLoading(true);
 
     axios
-      .post('http://localhost:8080/api/v0.1/hotelcredentials', { ...values })
+      .post('/api/hotelcredentials', { ...values })
       .then((result) => {
         setIsLoading(false);
 

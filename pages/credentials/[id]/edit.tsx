@@ -27,10 +27,7 @@ const CredentialsEdit: React.FC = () => {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { data, error } = useSWR(
-    `http://localhost:8080/api/v0.1/hotelcredentials/${query.id}`,
-    fetcher
-  );
+  const { data, error } = useSWR(`/api/hotelcredentials/${query.id}`, fetcher);
 
   if (error) return <Failure />;
 
@@ -39,12 +36,12 @@ const CredentialsEdit: React.FC = () => {
   const onFinish = (values: any) => {
     setIsLoading(true);
     axios
-      .put(`http://localhost:8080/api/v0.1/hotelcredentials/${query.id}`, { ...values })
+      .put(`/api/hotelcredentials/${query.id}`, { ...values })
       .then(() => {
         setIsLoading(false);
 
         // Revalidate key
-        mutate(`http://localhost:8080/api/v0.1/hotelcredentials/${query.id}`);
+        mutate(`/api/hotelcredentials/${query.id}`);
         // And redirect
         router.push(`/credentials/${query.id}`);
 

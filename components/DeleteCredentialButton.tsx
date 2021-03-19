@@ -28,7 +28,7 @@ const DeleteCredentialButton: React.FC<IndexProps> = ({ id, hotelName }) => {
       okText: 'Confirm',
       onOk() {
         axios
-          .delete(`http://localhost:8080/api/v0.1/hotelcredentials/${id}`)
+          .delete(`/api/hotelcredentials/${id}`)
           .then(() => {
             // TODO: Revalidate cache
             invalidateCredentialsCache();

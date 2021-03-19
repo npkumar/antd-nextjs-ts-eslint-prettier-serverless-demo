@@ -23,7 +23,7 @@ const CredentialsView: React.FC = () => {
   const { query } = router;
 
   const { data, error } = useSWR(
-    `http://localhost:8080/api/v0.1/hotelcredentials/${query.id}`,
+    `/api/hotelcredentials/${query.id}`,
     fetcher
   );
 

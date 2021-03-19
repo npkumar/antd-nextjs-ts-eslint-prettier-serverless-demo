@@ -27,9 +27,7 @@ const Index: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   const pageSize = 6;
-  let searchUrl = `http://localhost:8080/api/v0.1/hotelcredentials?page=${
-    current - 1
-  }&size=${pageSize}`;
+  let searchUrl = `/api/hotelcredentials?page=${current - 1}&size=${pageSize}`;
   if (search) {
     searchUrl += `&hotelName=${search}`;
   }
