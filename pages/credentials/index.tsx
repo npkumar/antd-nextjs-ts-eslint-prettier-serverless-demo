@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import Failure from '../../client/components/Failure';
 import omit from 'lodash/omit';
 import axios from 'axios';
-import { HOTEL_CREDENTIALS } from '../../client/types/credentials';
+import { HOTEL_CREDENTIAL } from '../../client/types/credentials';
 import CredentialStatus from '../../client/components/CredentialStatus';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
@@ -47,7 +47,7 @@ const Index: React.FC = () => {
 
   if (error) return <Failure />;
 
-  const content: HOTEL_CREDENTIALS[] | undefined = data?.content;
+  const content: HOTEL_CREDENTIAL[] | undefined = data?.content;
 
   return (
     <>

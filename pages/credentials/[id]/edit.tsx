@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Form, Input, PageHeader, Space, notification, Skeleton } from 'antd';
-import useSWR, { mutate } from 'swr';
+import { mutate } from 'swr';
 import { EyeOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import DeleteCredentialButton from '../../../client/components/DeleteCredentialButton';
 import Failure from '../../../client/components/Failure';
-import axios from 'axios';
 import CredentialStatus from '../../../client/components/CredentialStatus';
-import { HOTEL_CREDENTIAL_STATUS } from '../../../client/types/credentials';
-
-const fetcher = (url) => axios.get(url).then((res) => res.data);
+import { HOTEL_CREDENTIAL, HOTEL_CREDENTIAL_STATUS } from '../../../client/types/credentials';
+import { updateCredential, useCredential } from '../../../client/api/hotelCredentials';
 
 const layout = {
   labelCol: { span: 4 },
@@ -27,38 +25,38 @@ const CredentialsEdit: React.FC = () => {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { data, error } = useSWR(`/api/hotelcredentials/${query.id}`, fetcher);
+  //@ts-ignore
+  const { credential, isError, isLoading: isViewLoading } = useCredential(query.id);
 
-  if (error) return <Failure />;
+  if (isError) return <Failure />;
 
-  if (!data) return <Skeleton active title paragraph={{ rows: 8 }} />;
+  if (isViewLoading) return <Skeleton active title paragraph={{ rows: 8 }} />;
 
-  const onFinish = (values: any) => {
-    setIsLoading(true);
-    axios
-      .put(`/api/hotelcredentials/${query.id}`, { ...values })
-      .then(() => {
-        setIsLoading(false);
+  const onFinish = async (values: HOTEL_CREDENTIAL) => {
+    try {
+      setIsLoading(true);
+      //@ts-ignore
+      await updateCredential(query.id, values);
 
-        // Revalidate key
-        mutate(`/api/hotelcredentials/${query.id}`);
-        // And redirect
-        router.push(`/credentials/${query.id}`);
+      setIsLoading(false);
+      // Revalidate key
+      mutate(`/api/hotelcredentials/${query.id}`);
+      // And redirect
+      router.push(`/credentials/${query.id}`);
 
-        notification.info({
-          message: 'Successful!',
-          description: 'Updated credential',
-          placement: 'topRight',
-        });
-      })
-      .catch(() => {
-        setIsLoading(false);
-        notification.error({
-          message: 'Something went wrong!',
-          description: 'Could not update',
-          placement: 'topRight',
-        });
+      notification.info({
+        message: 'Successful!',
+        description: 'Updated credential',
+        placement: 'topRight',
       });
+    } catch (err) {
+      setIsLoading(false);
+      notification.error({
+        message: 'Something went wrong!',
+        description: 'Could not update',
+        placement: 'topRight',
+      });
+    }
   };
 
   return (
@@ -67,12 +65,16 @@ const CredentialsEdit: React.FC = () => {
         backIcon={false}
         title="Edit Credential"
         extra={[
-          <CredentialStatus key="status" status={data.status} />,
-          <Link key="view" href={`/credentials/${data.id}`}>
+          <CredentialStatus key="status" status={credential.status} />,
+          <Link key="view" href={`/credentials/${credential.id}`}>
             <Button icon={<EyeOutlined />}>View</Button>
           </Link>,
-          data.status === HOTEL_CREDENTIAL_STATUS.ACTIVE && (
-            <DeleteCredentialButton key="delete" id={data?.id} hotelName={data?.hotelName} />
+          credential.status === HOTEL_CREDENTIAL_STATUS.ACTIVE && (
+            <DeleteCredentialButton
+              key="delete"
+              id={credential.id}
+              hotelName={credential.hotelName}
+            />
           ),
         ]}
       />
@@ -81,7 +83,7 @@ const CredentialsEdit: React.FC = () => {
         <Form.Item
           label="Hotel Name"
           name="hotelName"
-          initialValue={data.hotelName}
+          initialValue={credential.hotelName}
           rules={[{ required: true, message: 'Please input hotel name!' }]}
         >
           <Input />
@@ -90,7 +92,7 @@ const CredentialsEdit: React.FC = () => {
         <Form.Item
           label="System Id"
           name="systemId"
-          initialValue={data.systemId}
+          initialValue={credential.systemId}
           rules={[{ required: true, message: 'Please input system Id!' }]}
         >
           <Input />
@@ -99,7 +101,7 @@ const CredentialsEdit: React.FC = () => {
         <Form.Item
           label="PMS User Id"
           name="pmsUserId"
-          initialValue={data.pmsUserId}
+          initialValue={credential.pmsUserId}
           rules={[{ required: true, message: 'Please input PMS User Id!' }]}
         >
           <Input />
@@ -108,7 +110,7 @@ const CredentialsEdit: React.FC = () => {
         <Form.Item
           label="PMS Password"
           name="pmsPassword"
-          initialValue={data?.pmsPassword}
+          initialValue={credential.pmsPassword}
           rules={[{ required: true, message: 'Please input PMS password!' }]}
         >
           <Input.Password />

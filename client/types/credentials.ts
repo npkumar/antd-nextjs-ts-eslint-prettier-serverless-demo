@@ -3,13 +3,13 @@ export enum HOTEL_CREDENTIAL_STATUS {
   INACTIVE = 'INACTIVE',
 }
 
-export interface HOTEL_CREDENTIALS {
+export interface HOTEL_CREDENTIAL {
   id: string;
   hotelName: string;
   systemId: string;
   pmsUserId: string;
   pmsPassword: string;
-  status: string;
+  status: HOTEL_CREDENTIAL_STATUS;
   createdAt: string;
   updatedAt: string;
   deactivatedAt: string;

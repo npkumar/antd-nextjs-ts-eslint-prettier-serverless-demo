@@ -3,7 +3,8 @@ import React from 'react';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { mutate, cache } from 'swr';
-import axios from 'axios';
+import { deleteCredential } from '../api/hotelCredentials';
+
 const { confirm } = Modal;
 interface IndexProps {
   id: string;
@@ -13,7 +14,7 @@ interface IndexProps {
 const invalidateCredentialsCache = () => {
   cache
     .keys()
-    .filter((key) => key.includes('credentials'))
+    .filter((key) => key.includes('hotelcredentials'))
     .forEach((key) => mutate(key));
 };
 
@@ -26,29 +27,27 @@ const DeleteCredentialButton: React.FC<IndexProps> = ({ id, hotelName }) => {
       content: `${hotelName} will be deleted`,
       cancelText: 'Cancel',
       okText: 'Confirm',
-      onOk() {
-        axios
-          .delete(`/api/hotelcredentials/${id}`)
-          .then(() => {
-            // TODO: Revalidate cache
-            invalidateCredentialsCache();
-            // Redirect to view page, status should be inactive now
-            router.push(`/credentials/${id}`);
-            notification.info({
-              message: 'Successful!',
-              description: `Deleted credential ${hotelName}`,
-              placement: 'topRight',
-            });
-          })
-          .catch(() => {
-            notification.error({
-              message: 'Something went wrong!',
-              description: `Could not delete ${hotelName}`,
-              placement: 'topRight',
-            });
+      onOk: async () => {
+        try {
+          await deleteCredential(id);
+          // TODO: Revalidate cache
+          invalidateCredentialsCache();
+          // Redirect to view page, status should be inactive now
+          router.push(`/credentials/${id}`);
+          notification.info({
+            message: 'Successful!',
+            description: `Deleted credential ${hotelName}`,
+            placement: 'topRight',
           });
+        } catch (err) {
+          notification.error({
+            message: 'Something went wrong!',
+            description: `Could not delete ${hotelName}`,
+            placement: 'topRight',
+          });
+        }
       },
-      onCancel() {
+      onCancel: () => {
         return;
       },
     });

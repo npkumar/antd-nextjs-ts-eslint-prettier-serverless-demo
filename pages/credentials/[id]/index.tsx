@@ -1,17 +1,14 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Button, Form, PageHeader, Skeleton } from 'antd';
-import useSWR from 'swr';
 import Text from 'antd/lib/typography/Text';
 import Link from 'next/link';
 import { EditOutlined } from '@ant-design/icons';
 import DeleteCredentialButton from '../../../client/components/DeleteCredentialButton';
 import Failure from '../../../client/components/Failure';
-import axios from 'axios';
 import CredentialStatus from '../../../client/components/CredentialStatus';
 import { HOTEL_CREDENTIAL_STATUS } from '../../../client/types/credentials';
-
-const fetcher = (url) => axios.get(url).then((res) => res.data);
+import { useCredential } from '../../../client/api/hotelCredentials';
 
 const layout = {
   labelCol: { span: 4 },
@@ -22,11 +19,12 @@ const CredentialsView: React.FC = () => {
   const router = useRouter();
   const { query } = router;
 
-  const { data, error } = useSWR(`/api/hotelcredentials/${query.id}`, fetcher);
+  //@ts-ignore
+  const { credential, isError, isLoading } = useCredential(query.id);
 
-  if (error) return <Failure />;
+  if (isError) return <Failure />;
 
-  if (!data) return <Skeleton active title paragraph={{ rows: 8 }} />;
+  if (isLoading) return <Skeleton active title paragraph={{ rows: 8 }} />;
 
   return (
     <>
@@ -34,27 +32,31 @@ const CredentialsView: React.FC = () => {
         backIcon={false}
         title="View Credential"
         extra={[
-          <CredentialStatus key="status" status={data.status} />,
-          <Link key="edit" href={`/credentials/${data.id}/edit`}>
+          <CredentialStatus key="status" status={credential.status} />,
+          <Link key="edit" href={`/credentials/${credential.id}/edit`}>
             <Button icon={<EditOutlined />}>Edit</Button>
           </Link>,
-          data.status === HOTEL_CREDENTIAL_STATUS.ACTIVE && (
-            <DeleteCredentialButton key="delete" id={data?.id} hotelName={data?.hotelName} />
+          credential.status === HOTEL_CREDENTIAL_STATUS.ACTIVE && (
+            <DeleteCredentialButton
+              key="delete"
+              id={credential?.id}
+              hotelName={credential?.hotelName}
+            />
           ),
         ]}
       />
 
       <Form {...layout}>
         <Form.Item label="Hotel Name">
-          <Text>{data.hotelName}</Text>
+          <Text>{credential.hotelName}</Text>
         </Form.Item>
 
         <Form.Item label="System Id">
-          <Text>{data.systemId}</Text>
+          <Text>{credential.systemId}</Text>
         </Form.Item>
 
         <Form.Item label="PMS User Id">
-          <Text>{data.pmsUserId}</Text>
+          <Text>{credential.pmsUserId}</Text>
         </Form.Item>
 
         <Form.Item label="PMS Password">
