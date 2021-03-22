@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Form, Input, PageHeader, Space, notification, Skeleton } from 'antd';
 import { mutate } from 'swr';
-import { EyeOutlined } from '@ant-design/icons';
+import { EyeOutlined, SendOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import DeleteCredentialButton from '../../../client/components/DeleteCredentialButton';
 import Failure from '../../../client/components/Failure';
@@ -38,7 +38,6 @@ const CredentialsEdit: React.FC = () => {
       setIsLoading(true);
       const credential = await updateCredential(credentialId, values);
 
-      setIsLoading(false);
       // Revalidate key
       mutate(`/api/hotelcredentials/${credential.id}`);
       // And redirect
@@ -50,12 +49,13 @@ const CredentialsEdit: React.FC = () => {
         placement: 'topRight',
       });
     } catch (err) {
-      setIsLoading(false);
       notification.error({
         message: 'Something went wrong!',
         description: 'Could not update',
         placement: 'topRight',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -90,6 +90,15 @@ const CredentialsEdit: React.FC = () => {
         </Form.Item>
 
         <Form.Item
+          label="Hotel Id"
+          name="hotelId"
+          initialValue={credential.hotelId}
+          rules={[{ required: true, message: 'Please input hotel Id!' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
           label="System Id"
           name="systemId"
           initialValue={credential.systemId}
@@ -118,7 +127,7 @@ const CredentialsEdit: React.FC = () => {
 
         <Form.Item {...tailLayout}>
           <Space>
-            <Button type="primary" htmlType="submit" loading={isLoading}>
+            <Button type="primary" htmlType="submit" loading={isLoading} icon={<SendOutlined />}>
               Submit
             </Button>
             <Button htmlType="button" onClick={() => form.resetFields()}>

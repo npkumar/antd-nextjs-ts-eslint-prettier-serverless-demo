@@ -52,6 +52,10 @@ const CredentialsView: React.FC = () => {
           <Text>{credential.hotelName}</Text>
         </Form.Item>
 
+        <Form.Item label="Hotel Id">
+          <Text>{credential.hotelId}</Text>
+        </Form.Item>
+
         <Form.Item label="System Id">
           <Text>{credential.systemId}</Text>
         </Form.Item>

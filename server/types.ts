@@ -5,6 +5,6 @@ export interface NextApiRequestWithCongito extends NextApiRequest {
   group: string | null;
 }
 
-export interface NextApiRequestHotelCredentialWithCognito extends NextApiRequestWithCongito {
+export interface NextApiRequestHotelWithCognitoAndCredential extends NextApiRequestWithCongito {
   credentialId: string | null;
 }

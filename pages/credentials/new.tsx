@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, notification, PageHeader, Space } from 'antd';
 import { useRouter } from 'next/router';
+import { SendOutlined } from '@ant-design/icons';
 import { createCredential } from '../../client/api/hotelCredentials';
 import { HOTEL_CREDENTIAL } from '../../client/types/credentials';
 
@@ -23,7 +24,6 @@ const CredentialsNew: React.FC = () => {
     try {
       setIsLoading(true);
       const credentail = await createCredential(values);
-      setIsLoading(false);
 
       // Redirect to new credential
       router.push(`/credentials/${credentail.id}`);
@@ -34,12 +34,13 @@ const CredentialsNew: React.FC = () => {
         placement: 'topRight',
       });
     } catch (err) {
-      setIsLoading(false);
       notification.error({
         message: 'Something went wrong!',
         description: 'Could not create',
         placement: 'topRight',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -52,6 +53,14 @@ const CredentialsNew: React.FC = () => {
           label="Hotel Name"
           name="hotelName"
           rules={[{ required: true, message: 'Please input hotel name!' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Hotel Id"
+          name="hotelId"
+          rules={[{ required: true, message: 'Please input hotel Id!' }]}
         >
           <Input />
         </Form.Item>
@@ -82,7 +91,7 @@ const CredentialsNew: React.FC = () => {
 
         <Form.Item {...tailLayout}>
           <Space>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" icon={<SendOutlined />}>
               Submit
             </Button>
             <Button htmlType="button" onClick={() => form.resetFields()} loading={isLoading}>

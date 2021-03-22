@@ -6,6 +6,7 @@ export enum HOTEL_CREDENTIAL_STATUS {
 export interface HOTEL_CREDENTIAL {
   id: string;
   hotelName: string;
+  hotelId: string;
   systemId: string;
   pmsUserId: string;
   pmsPassword: string;

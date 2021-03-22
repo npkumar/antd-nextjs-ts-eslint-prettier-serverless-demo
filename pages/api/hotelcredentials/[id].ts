@@ -1,18 +1,22 @@
 import axios from 'axios';
 import getConfig from '../../../server/config';
-import { getAPIHandlerCredentialWithCongnito } from '../../../server/handler';
+import { getAPIHandlerWithCongnitoAndCredential } from '../../../server/handler';
 const { hotelCredentialsEndpoint: endpoint } = getConfig();
 
-export default getAPIHandlerCredentialWithCongnito()
+const axiosInstance = axios.create({ baseURL: endpoint });
+
+export default getAPIHandlerWithCongnitoAndCredential()
   .get(async (req, res) => {
-    const result = await axios.get(`${endpoint}/${req.credentialId}`, { params: req.query });
+    const result = await axiosInstance.get(`/${req.credentialId}`, {
+      params: req.query,
+    });
     res.json(result.data);
   })
   .put(async (req, res) => {
-    const result = await axios.put(`${endpoint}/${req.credentialId}`, req.body);
+    const result = await axiosInstance.put(`/${req.credentialId}`, req.body);
     res.json(result.data);
   })
   .delete(async (req, res) => {
-    const result = await axios.delete(`${endpoint}/${req.credentialId}`);
+    const result = await axiosInstance.delete(`/${req.credentialId}`);
     res.json(result.data);
   });

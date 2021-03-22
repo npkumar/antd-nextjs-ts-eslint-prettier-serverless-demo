@@ -80,10 +80,14 @@ const Index: React.FC = () => {
               <Space>
                 <CredentialStatus status={item.status} />
                 <Link href={`/credentials/${item.id}`}>
-                  <Button icon={<EyeOutlined />}>View</Button>
+                  <Button size="small" icon={<EyeOutlined />}>
+                    View
+                  </Button>
                 </Link>
                 <Link href={`/credentials/${item.id}/edit`}>
-                  <Button icon={<EditOutlined />}>Edit</Button>
+                  <Button size="small" icon={<EditOutlined />}>
+                    Edit
+                  </Button>
                 </Link>
               </Space>
             </Skeleton>
