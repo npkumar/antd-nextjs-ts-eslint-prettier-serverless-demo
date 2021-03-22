@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, notification, PageHeader, Space } from 'antd';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import { createCredential } from '../../client/api/hotelCredentials';
+import { HOTEL_CREDENTIAL } from '../../client/types/credentials';
 
 const layout = {
   labelCol: { span: 4 },
@@ -18,30 +19,27 @@ const CredentialsNew: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
-    setIsLoading(true);
+  const onFinish = async (values: HOTEL_CREDENTIAL) => {
+    try {
+      setIsLoading(true);
+      const result = await createCredential(values);
+      setIsLoading(false);
 
-    axios
-      .post('/api/hotelcredentials', { ...values })
-      .then((result) => {
-        setIsLoading(false);
+      router.push(`/credentials/${result.data.id}`);
 
-        router.push(`/credentials/${result.data.id}`);
-
-        notification.info({
-          message: 'Successful!',
-          description: `Created credential`,
-          placement: 'topRight',
-        });
-      })
-      .catch(() => {
-        setIsLoading(false);
-        notification.error({
-          message: 'Something went wrong!',
-          description: `Could not create`,
-          placement: 'topRight',
-        });
+      notification.info({
+        message: 'Successful!',
+        description: 'Created credential',
+        placement: 'topRight',
       });
+    } catch (err) {
+      setIsLoading(false);
+      notification.error({
+        message: 'Something went wrong!',
+        description: 'Could not create',
+        placement: 'topRight',
+      });
+    }
   };
 
   return (
