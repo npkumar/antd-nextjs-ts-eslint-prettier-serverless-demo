@@ -22,10 +22,11 @@ const CredentialsNew: React.FC = () => {
   const onFinish = async (values: HOTEL_CREDENTIAL) => {
     try {
       setIsLoading(true);
-      const result = await createCredential(values);
+      const credentail = await createCredential(values);
       setIsLoading(false);
 
-      router.push(`/credentials/${result.data.id}`);
+      // Redirect to new credential
+      router.push(`/credentials/${credentail.id}`);
 
       notification.info({
         message: 'Successful!',

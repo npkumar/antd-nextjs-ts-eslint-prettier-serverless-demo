@@ -9,6 +9,7 @@ import Failure from '../../../client/components/Failure';
 import CredentialStatus from '../../../client/components/CredentialStatus';
 import { HOTEL_CREDENTIAL, HOTEL_CREDENTIAL_STATUS } from '../../../client/types/credentials';
 import { updateCredential, useCredential } from '../../../client/api/hotelCredentials';
+import { getQueryValue } from '../../../client/util';
 
 const layout = {
   labelCol: { span: 4 },
@@ -25,8 +26,8 @@ const CredentialsEdit: React.FC = () => {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  //@ts-ignore
-  const { credential, isError, isLoading: isViewLoading } = useCredential(query.id);
+  const credentialId = getQueryValue(query.id);
+  const { credential, isError, isLoading: isViewLoading } = useCredential(credentialId);
 
   if (isError) return <Failure />;
 
@@ -35,14 +36,13 @@ const CredentialsEdit: React.FC = () => {
   const onFinish = async (values: HOTEL_CREDENTIAL) => {
     try {
       setIsLoading(true);
-      //@ts-ignore
-      await updateCredential(query.id, values);
+      const credential = await updateCredential(credentialId, values);
 
       setIsLoading(false);
       // Revalidate key
-      mutate(`/api/hotelcredentials/${query.id}`);
+      mutate(`/api/hotelcredentials/${credential.id}`);
       // And redirect
-      router.push(`/credentials/${query.id}`);
+      router.push(`/credentials/${credential.id}`);
 
       notification.info({
         message: 'Successful!',

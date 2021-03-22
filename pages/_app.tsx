@@ -1,5 +1,5 @@
 import '../node_modules/antd/dist/antd.less';
-import '../styles/globals.css';
+import '../client/styles/globals.css';
 
 import dynamic from 'next/dynamic';
 

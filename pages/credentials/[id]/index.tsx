@@ -9,6 +9,7 @@ import Failure from '../../../client/components/Failure';
 import CredentialStatus from '../../../client/components/CredentialStatus';
 import { HOTEL_CREDENTIAL_STATUS } from '../../../client/types/credentials';
 import { useCredential } from '../../../client/api/hotelCredentials';
+import { getQueryValue } from '../../../client/util';
 
 const layout = {
   labelCol: { span: 4 },
@@ -19,8 +20,8 @@ const CredentialsView: React.FC = () => {
   const router = useRouter();
   const { query } = router;
 
-  //@ts-ignore
-  const { credential, isError, isLoading } = useCredential(query.id);
+  const credentialId = getQueryValue(query.id);
+  const { credential, isError, isLoading } = useCredential(credentialId);
 
   if (isError) return <Failure />;
 

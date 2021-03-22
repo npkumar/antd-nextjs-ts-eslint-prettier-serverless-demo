@@ -5,7 +5,7 @@ const { i18n } = require('./next-i18next.config');
 module.exports = (phase, { defaultConfig }) =>
   withAntdLess({
     ...defaultConfig,
-    lessVarsFilePath: './styles/antd-custom.less',
+    lessVarsFilePath: './client/styles/antd-custom.less',
     webpack: (config, { isServer }) => {
       if (isServer) {
         const antStyles = /antd\/.*?\/style.*?/;
