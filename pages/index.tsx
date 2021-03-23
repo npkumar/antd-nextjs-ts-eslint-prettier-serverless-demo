@@ -13,7 +13,7 @@ const Index: React.FC = () => {
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['common', 'dashboard'])),
+    ...(await serverSideTranslations(locale, ['dashboard'])),
   },
 });
 

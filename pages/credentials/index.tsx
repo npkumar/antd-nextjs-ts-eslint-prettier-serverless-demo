@@ -27,8 +27,6 @@ const Index: React.FC = () => {
     hotelName: search,
   });
 
-  if (isError) return <Failure />;
-
   useEffect(() => setCurrent(qPage), [qPage]);
 
   useEffect(() => {
@@ -40,9 +38,11 @@ const Index: React.FC = () => {
     setMaxItems(isNaN(totalPages) ? 1 : totalPages * (pageSize + 1));
   }, [totalPages]);
 
+  if (isError) return <Failure />;
+
   return (
     <>
-      <PageHeader backIcon={false} title="Credentials" subTitle="Credentials description" />
+      <PageHeader backIcon={false} title="Credentials" subTitle="Description for credentials" />
       <List
         header={
           <Row justify="end" gutter={8}>
@@ -76,7 +76,7 @@ const Index: React.FC = () => {
         renderItem={(item: HOTEL_CREDENTIAL) => (
           <List.Item>
             <Skeleton title={false} loading={isLoading} active>
-              <List.Item.Meta title={item.hotelName} description={item.pmsUserId} />
+              <List.Item.Meta title={item.hotelName} description={item.hotelId} />
               <Space>
                 <CredentialStatus status={item.status} />
                 <Link href={`/credentials/${item.id}`}>
