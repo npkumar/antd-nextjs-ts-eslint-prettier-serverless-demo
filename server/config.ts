@@ -5,12 +5,13 @@ enum NODE_ENV {
 
 const config = {
   development: {
-    hotelCredentialsEndpoint: 'http://localhost:8080/api/v0.1/hotelcredentials',
+    hotelCredentialsEndpoint: 'http://tk2-409-45983.vs.sakura.ne.jp:9090/api/v0.1/hotelcredentials',
   },
   production: {
-    hotelCredentialsEndpoint: 'http://localhost:8080/api/v0.1/hotelcredentials',
+    hotelCredentialsEndpoint: 'http://tk2-409-45983.vs.sakura.ne.jp:9090/api/v0.1/hotelcredentials',
   },
 };
+
 
 const getConfig = () =>
   process.env.NODE_ENV === NODE_ENV.development ? config.development : config.production;
